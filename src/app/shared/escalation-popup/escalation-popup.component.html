@@ -1,0 +1,132 @@
+<div class="popup-container">
+  <div class="section">
+    <!-- BASIC INFO -->
+    <div class="basic-info">
+      <h2>BASIC INFO</h2>
+      <div class="info-table">
+        <div class="row">
+          <div class="label">Escalation ID</div>
+          <div class="colon">:</div>
+          <div class="value">1234567</div>
+        </div>
+        <div class="row">
+          <div class="label">Ticket No.</div>
+          <div class="colon">:</div>
+          <div class="value">--</div>
+        </div>
+        <div class="row">
+          <div class="label">Site Name</div>
+          <div class="colon">:</div>
+          <div class="value">KFC - Tadepally</div>
+        </div>
+        <div class="row">
+          <div class="label">Camera Name</div>
+          <div class="colon">:</div>
+          <div class="value">MDX712 - Cam01</div>
+        </div>
+        <div class="row">
+          <div class="label">Event Time (CT)</div>
+          <div class="colon">:</div>
+          <div class="value">18-04-2025 05:43:18</div>
+        </div>
+        <div class="row">
+          <div class="label">Event Time Customer</div>
+          <div class="colon">:</div>
+          <div class="value">18-04-2025 05:43:18</div>
+        </div>
+        <div class="row">
+          <div class="label">Event Time (IN)</div>
+          <div class="colon">:</div>
+          <div class="value">18-04-2025 16:13:18</div>
+        </div>
+        <div class="row">
+          <div class="label">Type</div>
+          <div class="colon">:</div>
+          <div class="value">--</div>
+        </div>
+        <div class="row">
+          <div class="label">City</div>
+          <div class="colon">:</div>
+          <div class="value">Tadepally</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ALARM EVENTS -->
+    <div class="alarm-events">
+      <h2>ALARM EVENTS ON</h2>
+      <table class="alarm-table">
+        <tr>
+          <th>TIME</th>
+          <th>USER</th>
+          <th>DESCRIPTION</th>
+          <th>STATUS</th>
+        </tr>
+        <tr>
+          <td>18-04-2025 05:44:16</td>
+          <td class="user-info">
+            <img src="https://i.pravatar.cc/30?img=1" class="user-img" />
+            User
+          </td>
+          <td class="tag-red">🔔</td>
+          <td class="status-success">Success</td>
+        </tr>
+        <tr>
+          <td>18-04-2025 05:49:16</td>
+          <td class="user-info">
+            <img src="https://i.pravatar.cc/30?img=2" class="user-img" />
+            User
+          </td>
+          <td class="tag-red">🔔</td>
+          <td class="status-success">Success</td>
+        </tr>
+        <tr>
+          <td>18-04-2025 05:54:16</td>
+          <td class="user-info">
+            <img src="https://i.pravatar.cc/30?img=3" class="user-img" />
+            User
+          </td>
+          <td class="tag-red">🔔</td>
+          <td class="status-success">Success</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- DURATION -->
+  <div class="total-duration">
+     <div class="row1">
+          <div class="label1">Site Name</div>
+            <div class="colon1">:</div>
+          <div class="value1">KFC - Tadepally</div>
+        </div>
+    <span>TOTAL DURATION   0h 20m 18s</span>
+    <span>INDIA 0h 7m 27s</span>
+    <span>US 0h 1m 20s</span>
+  </div>
+
+<div class="report-header">
+      <h2>ESCALATION REPORT</h2>
+  <!-- TIMEZONE -->
+  <div class="timezone">
+    <label><input type="radio" checked /> CT</label>
+    <label><input type="radio" /> Customer TZ (MT)</label>
+    <label><input type="radio" /> IST</label>
+  </div>
+
+
+</div>
+
+<ag-grid-angular
+  class="ag-theme-alpine report-grid"
+  [rowData]="rowData"
+   theme="legacy"
+  [columnDefs]="columnDefs"
+  [defaultColDef]="defaultColDef"
+  [pagination]="true"
+  [paginationPageSize]="5"
+   (gridReady)="onGridReady($event)"
+  style="width: 100%; height: 250px;">
+</ag-grid-angular>
+
+</div>

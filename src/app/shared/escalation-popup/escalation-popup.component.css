@@ -1,0 +1,252 @@
+@font-face {
+    font-family: 'Neometric Bold';
+    font-style: normal;
+    font-weight: 600;
+    src: local('Neometric'), url('https://fonts.cdnfonts.com/s/18720/Unnamed Bold (Regular).woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Neometric Medium';
+    font-style: normal;
+    font-weight: 500;
+    src: local('Neometric'), url('https://fonts.cdnfonts.com/s/18720/Neometric Medium (Regular).woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Nasalization';
+    /* font-style: normal; */
+    /* font-weight: 400; */
+    src: local('Nasalization'), url('https://fonts.cdnfonts.com/s/26353/NASALIZA.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'NasalizationLight';
+    font-style: normal;
+    /* font-weight: 400; */
+    src: url('/assets/fonts/Nasalization Rg.otf') format('opentype'),
+}
+
+
+.popup-container {
+  max-width: 1200px;
+  margin: auto;
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  font-size: 12px;
+  margin: 0 0 10px;
+   font-family: 'Neometric Bold';
+
+}
+
+.section {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+:host ::ng-deep .custom-header {
+  font-family: 'Neometric Medium' !important;
+  font-size: 12px !important;
+}
+
+:host ::ng-deep .custom-cell {
+  font-family: 'Neometric Medium' !important;
+  font-size: 12px !important;
+}
+
+:host ::ng-deep .ag-paging-panel {
+  font-family: 'Neometric Medium' !important;
+  font-size: 12px !important;
+}
+
+.basic-info,
+.alarm-events {
+  flex: 1;
+  min-width: 350px;
+}
+
+.basic-info p {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+.basic-info p span {
+  font-weight: bold;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+   
+}
+
+table th,
+table td {
+  border-bottom: 1px solid #ddd;
+  padding: 10px;
+  font-size: 12px;
+     font-family: 'Neometric Regular';
+  text-align: left;
+}
+
+table th {
+  background: #fafafa;
+  font-weight: 600;
+     font-family: 'Neometric Regular';
+}
+
+.alarm-table td {
+  vertical-align: middle;
+}
+
+.user-img {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 8px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.tag-red {
+  color: red;
+  font-size: 18px;
+}
+
+.status-success {
+  color: green;
+  font-weight: 600;
+}
+
+.total-duration {
+  display: flex;
+  justify-content: space-between;
+  margin: 40px 0;
+
+  font-weight: bold;
+    font-size: 12px;
+
+   font-family: 'Neometric Bold';
+}
+
+.report-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0 10px;
+}
+
+.report-header h2 {
+  margin: 0;
+}
+
+.timezone {
+  display: flex;
+  gap: 15px;
+  font-size: 14px;
+  align-items: center;
+}
+
+
+.timezone {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.timezone label {
+  font-size: 10px;
+
+}
+
+.escalation-report h2 {
+  margin-top: 20px;
+}
+
+.note {
+  font-size: 12px;
+  color: #555;
+  margin-top: 5px;
+}
+
+.edit-icon {
+  cursor: pointer;
+}
+
+.add-btn {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.add-btn button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #eee;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.info-table {
+  display: table;
+  font-size: 14px;
+  width: 100%;
+}
+
+.row {
+  display: table-row;
+}
+.row1 {
+  display: table-row;
+}
+
+.label, .colon, .value {
+  display: table-cell;
+  padding: 4px 6px;
+}
+
+.label {
+  /* font-weight: 600; */
+  width: 200px; /* controls alignment */
+   font-family: 'Neometric Medium';
+     font-size: 10px;
+
+ opacity: 40%;
+}
+
+.colon {
+  width: 10px;
+  text-align: center;
+}
+
+.value {
+  color: #333;
+     font-family: 'Neometric Medium';
+     font-size: 10px;
+}
+
+
+.report-grid {
+  width: 100%;
+  height: 300px;
+}
+
+.ag-theme-alpine {
+  --ag-header-background-color: #fafafa;
+  --ag-odd-row-background-color: #fcfcfc;
+  border-radius: 8px;
+  overflow: hidden;
+}

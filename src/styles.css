@@ -1,0 +1,52 @@
+/* You can add global styles to this file, and also import other style files */
+html, body {
+    margin: 0 !important;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+  }
+html, body { height: 100%; }
+body { margin: 0; font-family: Neometric 2; }
+
+.calendar-popup {
+  /* Ensure the popup is styled properly */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  z-index: 1000;
+  width: 300px;
+  text-align: center;
+}
+
+.popup-content mat-calendar {
+  width: 100%;
+}
+
+.mat-calendar {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.mat-calendar-header {
+  background-color: #3f51b5; /* Primary color */
+  color: white;
+}
+
+.mat-calendar-table {
+  font-size: 14px;
+}
+
+.mat-calendar .mat-calendar-body-today {
+  background-color: #3f51b5 !important; /* Ensure the color is applied */
+  color: white !important; /* Ensure text color is applied */
+  border-radius: 50%; /* Circular highlight */
+}
+
+@import 'ag-grid-community/styles/ag-grid.css';
+@import 'ag-grid-community/styles/ag-theme-alpine.css';

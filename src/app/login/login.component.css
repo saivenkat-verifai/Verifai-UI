@@ -1,0 +1,148 @@
+@font-face {
+  font-family: 'Neometric Regular';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Neometric'), url('https://fonts.cdnfonts.com/s/18720/Neometric-Regular.woff') format('woff');
+}
+
+.login-container {
+  display: flex;
+  height: 100vh;
+  font-family: 'Neometric Regular';
+}
+
+.left-panel {
+  flex: 2;
+  background: url('/assets/login-bg.png') center/cover no-repeat;
+  position: relative;
+}
+
+.heading {
+  font-family: 'Neometric Regular';
+  font-size: 20px;
+  font-weight: 100;
+  font-style: normal;
+  line-height: 24px;
+  /* something readable */
+  letter-spacing: 0;
+  /* if XD had it */
+  opacity: 0.5;
+  text-align: center;
+  color: #000000;
+}
+
+.logo-img {
+  height: 100px;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+.overlay {
+  background-color: rgba(255, 0, 0, 0.5);
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+
+.right-panel {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-box {
+  width: 300px;
+  text-align: center;
+}
+
+.login-box p {
+  font-size: 20px;
+  font-family: 'Neometric Regular';
+  opacity: 50%;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.ai {
+  color: red;
+}
+
+.live {
+  font-size: 14px;
+  color: red;
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  margin: 0 0 20px 0;
+  padding: 10px;
+  opacity: 0.5;
+  box-sizing: border-box;
+}
+
+.extras {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  margin: 10px 0;
+}
+
+button {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 10px;
+  width: 100%;
+  font-weight: bold;
+  cursor: pointer;
+  font-family: 'Neometric Regular';
+ border-radius: 5px;
+ font-size: 16px;
+}
+
+.username-label {
+  font-family: 'Neometric Regular';
+  margin-bottom: 5px;
+
+  display: block;
+  text-align: left;
+  font-size: 14px;
+
+}
+
+.forget-password {
+  font-family: 'Neometric Regular';
+  font-size: 12px;
+  opacity: 1;
+  color: #ED3237;
+}
+
+.remember-me {
+  font-family: 'Neometric Regular';
+  font-size: 12px;
+  opacity: 1;
+}
+
+.password-label {
+  font-family: 'Neometric Regular';
+  margin-bottom: 5px;
+  display: block;
+  text-align: left;
+  font-size: 14px;
+}
+
+.mb40 {
+  margin-bottom: 40px;
+}
+.mb25 {
+  margin-bottom: 25px;
+}
+
+.mb10 {
+  margin-bottom: 10px;
+}

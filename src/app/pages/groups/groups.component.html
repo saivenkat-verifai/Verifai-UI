@@ -1,0 +1,88 @@
+<div class="dashboard-container">
+  <div class="dashboard-content">
+    <div class="dashboard-content-section">
+      <div class="section-header">
+        <h2>EVENTS</h2>
+      </div>
+      <div class="calender-section-body">
+        <!-- Escalated summary cards -->
+        <div class="escalated-section calender-second-section">
+          <div
+            class="calender-escalated-card"
+            *ngFor="let e of secondEscalatedDetails"
+          >
+            <div class="calender-escalated-card-content">
+              <h4>{{ e.label }}</h4>
+              <p [ngStyle]="{ color: e.color }">{{ e.value }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right-side Popup -->
+        <div class="right-tablepopup" *ngIf="isTablePopupVisible">
+          <div class="popup-header">
+            <div class="popup-header-content">
+              <div class="icon-info">
+                <p class="label">{{ selectedItem.name }}</p>
+              </div>
+            </div>
+            <div *ngIf="selectedDate" class="selected-date">
+              <button class="statusbutton">
+                <span
+                  class="dot"
+                  [ngStyle]="{
+                    'background-color':
+                      selectedItem?.status === 'ACTIVE'
+                        ? '#53BF8B'
+                        : '#00000040'
+                  }"
+                >
+                </span>
+                {{ selectedItem?.status }}
+              </button>
+            </div>
+            <button class="close-btn" (click)="closePopup()">×</button>
+          </div>
+          <div class="popup-body">
+            <div class="escalated-content-section">
+              <app-groups-popup></app-groups-popup>
+            </div>
+          </div>
+        </div>
+
+        <!-- Search bar -->
+        <div class="calender-escalated-section calender-third-section">
+          <div class="search-wrapper">
+            <input
+              type="text"
+              placeholder="Search here"
+              [(ngModel)]="searchTerm"
+              (input)="onSearchChange()"
+              class="search-input"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AG Grid -->
+    <div *ngIf="selectedFilter === 'CLOSED'">
+      <div class="escalated-content-section">
+        <ag-grid-angular
+          style="width: 100%; height: 460px"
+     theme="legacy"
+          class="ag-theme-alpine"
+          [rowData]="rowData"
+          [columnDefs]="columnDefs"
+          [defaultColDef]="defaultColDef"
+          [pagination]="true"
+          [paginationPageSize]="10"
+          [localeText]="localeText"
+          (gridReady)="onGridReady($event)"
+          (cellClicked)="onCellClicked($event)"
+        >
+        </ag-grid-angular>
+      </div>
+    </div>
+  </div>
+</div>

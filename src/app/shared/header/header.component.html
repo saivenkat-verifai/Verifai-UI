@@ -1,0 +1,121 @@
+<header class="header">
+  <!-- Logo Section -->
+  <a routerLink="/login">
+    <img src="assets/dashboard-logo.png" alt="VERIFAI Logo" class="logo-img" />
+  </a>
+
+  <!-- Divider -->
+  <div class="header-section divider"></div>
+
+  <!-- Navigation Menu -->
+  <div class="header-section nav">
+    <nav>
+      <a
+        routerLink="/dashboard"
+        routerLinkActive="active"
+        #rlaDashboard="routerLinkActive"
+      >
+        <img
+          [src]="
+            rlaDashboard.isActive
+              ? 'assets/headericons/dashboard-icon-active.svg'
+              : 'assets/headericons/dashboard-icon.svg'
+          "
+          alt="Dashboard"
+          class="nav-icon"
+        />
+        DASHBOARD
+      </a>
+
+      <a
+        routerLink="/events"
+        routerLinkActive="active"
+        #rlaEvents="routerLinkActive"
+      >
+        <img
+          [src]="
+            rlaEvents.isActive
+              ? 'assets/headericons/events-icon-active.svg'
+              : 'assets/headericons/events-icon.svg'
+          "
+          alt="Events"
+          class="nav-icon"
+        />
+        EVENTS
+      </a>
+
+      <a
+        routerLink="/groups"
+        routerLinkActive="active"
+        #rlaGroups="routerLinkActive"
+      >
+        <img
+          [src]="
+            rlaGroups.isActive
+              ? 'assets/headericons/groups-icon-active.svg'
+              : 'assets/headericons/groups-icon.svg'
+          "
+          alt="Groups"
+          class="nav-icon"
+        />
+        GROUPS
+      </a>
+
+      <a
+        routerLink="/employees"
+        routerLinkActive="active"
+        #rlaEmployees="routerLinkActive"
+      >
+        <img
+          [src]="
+            rlaEmployees.isActive
+              ? 'assets/headericons/employees-icon-active.svg'
+              : 'assets/headericons/employees-icon.svg'
+          "
+          alt="Employees"
+          class="nav-icon"
+        />
+        EMPLOYEES
+      </a>
+
+      <a
+        routerLink="/sites"
+        routerLinkActive="active"
+        #rlaSites="routerLinkActive"
+      >
+        <img
+          [src]="
+            rlaSites.isActive
+              ? 'assets/headericons/sites-icon-active.svg'
+              : 'assets/headericons/sites-icon.svg'
+          "
+          alt="Sites"
+          class="nav-icon"
+        />
+        SITES
+      </a>
+    </nav>
+  </div>
+
+  <!-- Divider -->
+  <div class="header-section divider"></div>
+
+  <!-- User Section -->
+  <div class="header-section user">
+    <div class="div">
+      <button class="ticket-icon">
+        <img src="assets/ticket-icon.svg" alt="header" class="nav-icon" />
+        <span class="ticket-count">{{ ticketCount }}</span>
+      </button>
+    </div>
+    <div class="div">
+      <button class="user-icon">
+        <img src="assets/user.svg" alt="header" class="nav-icon" />
+      </button>
+    </div>
+    <div class="user-info">
+      <p class="username">Username</p>
+      <p class="userPosition">Monitoring Head</p>
+    </div>
+  </div>
+</header>

@@ -1,0 +1,242 @@
+<div class="dashboard-container">
+  <div class="dashboard-content">
+    <div class="dashboard-content-section">
+      <div class="section-header">
+        <h2>EVENTS</h2>
+        <div class="filters">
+          <button
+            [class.active]="selectedFilter === 'CLOSED'"
+            (click)="setFilter('CLOSED')"
+          >
+            CLOSED
+          </button>
+          <button
+            [class.active]="selectedFilter === 'PENDING'"
+            (click)="setFilter('PENDING')"
+          >
+            PENDING
+          </button>
+        </div>
+      </div>
+
+      <div class="calender-section-body">
+        <!-- Add calendar section below the dashboard header -->
+
+        <div class="calendar-section-wrapper calender-first-section">
+          <div class="calendar-section">
+            <button class="calendar-icon" (click)="openCalendarPopup()">
+              <img src="assets/calender.svg" alt="Dashboard" class="nav-icon" />
+            </button>
+
+            <div class="calendar-controls">
+              <button class="arrow left-arrow" (click)="changeDate(-1)">
+                ←
+              </button>
+
+              <div *ngIf="selectedDate" class="selected-date">
+                <p>{{ selectedDate | date : "dd MMMM, yyyy" }}</p>
+              </div>
+
+              <button class="arrow right-arrow" (click)="changeDate(1)">
+                →
+              </button>
+            </div>
+
+            <button class="today-button" (click)="setToday()">TODAY</button>
+          </div>
+        </div>
+
+        <div class="escalated-section calender-second-section">
+          <div
+            class="calender-escalated-card"
+            *ngFor="let e of secondEscalatedDetails"
+            (click)="openPopup(e)"
+          >
+            <div class="calender-escalated-card-content">
+              <!-- Show label if present -->
+              <ng-container *ngIf="e.label; else iconTemplate">
+                <h4>{{ e.label }}</h4>
+              </ng-container>
+
+              <!-- Show icon if label not present -->
+              <ng-template #iconTemplate>
+                <img [src]="e.iconPath" alt="icon" class="escalated-icon" />
+              </ng-template>
+              <p [ngStyle]="{ color: e.color }">{{ e.value }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right-side Popup -->
+        <div class="right-popup" *ngIf="isPopupVisible">
+          <div class="popup-header">
+            <div class="popup-header-content">
+              <img
+                *ngIf="selectedItem?.iconPath"
+                [src]="selectedItem.iconPath"
+                alt="icon"
+              />
+              <div class="icon-info">
+                <p class="label">
+                  {{ getIconLabel(selectedItem?.iconPath) }}
+                </p>
+              </div>
+            </div>
+            <div *ngIf="selectedDate" class="selected-date">
+              <p>{{ selectedDate | date : "dd MMMM, yyyy" }}</p>
+            </div>
+            <button class="close-btn" (click)="closePopup()">×</button>
+          </div>
+          <div class="popup-body">
+            <div class="escalated-content-section">
+              <ag-grid-angular
+                style="width: 100%; height: 100vh"
+                class="ag-theme-alpine"
+                 theme="legacy"
+                [rowData]="popupRowData"
+                [columnDefs]="popupColumnDefs"
+                [defaultColDef]="{
+                  resizable: true,
+                  sortable: true,
+                  filter: true
+                }"
+                [pagination]="true"
+                [paginationPageSize]="10"
+                [localeText]="localeText"
+              >
+              </ag-grid-angular>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right-side Popup for ESCALATION DETAILS -->
+        <div class="right-tablepopup" *ngIf="isTablePopupVisible">
+          <div class="popup-header">
+            <div class="popup-header-content">
+              <img
+                *ngIf="selectedItem?.iconPath"
+                [src]="selectedItem.iconPath"
+                alt="icon"
+              />
+              <div class="icon-info">
+                <p class="label">ESCALATION DETAILS</p>
+              </div>
+            </div>
+            <div *ngIf="selectedDate" class="selected-date">
+              <p>{{ selectedDate | date : "dd MMMM, yyyy" }}</p>
+            </div>
+            <button class="close-btn" (click)="closePopup()">×</button>
+          </div>
+          <div class="popup-body">
+            <div class="escalated-content-section">
+              <app-escalation-popup></app-escalation-popup>
+            </div>
+          </div>
+        </div>
+
+        <!-- end    -->
+        <div class="calender-escalated-section calender-third-section">
+          <!-- Search bar -->
+          <div class="search-wrapper">
+            <input
+              type="text"
+              placeholder="Search here"
+              [(ngModel)]="searchTerm"
+              class="search-input"
+            />
+          </div>
+        </div>
+
+        <!-- Calendar Popup -->
+        <div
+          class="calendar-popup-overlay"
+          *ngIf="isCalendarPopupOpen"
+          (click)="closeCalendarPopup()"
+        ></div>
+
+        <div class="calendar-popup" *ngIf="isCalendarPopupOpen">
+          <div class="popup-header">
+            <h3>Calendar</h3>
+            <button class="close-button" (click)="closeCalendarPopup()">
+              ✖
+            </button>
+          </div>
+          <div class="popup-content">
+            <mat-calendar
+              [(selected)]="selectedDate"
+              (selectedChange)="onDateSelected($event)"
+            ></mat-calendar>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CLOSED View -->
+    <div *ngIf="selectedFilter === 'CLOSED'">
+      <div class="escalated-content-section">
+        <div class="escalated-section-body">
+          <div class="escalated-section first-section">
+            <div class="escalated-card" *ngFor="let e of escalatedDetails">
+              <div class="escalated-card-content">
+                <p [ngStyle]="{ color: e.color }">{{ e.value }}</p>
+                <h4>{{ e.label }}</h4>
+              </div>
+            </div>
+          </div>
+
+          <div class="escalated-section second-section">
+            <!-- second section content -->
+            <div class="event-escalated-card event-card">
+              <div class="event-escalated-card-content">
+                <p><span class="green"></span>Event</p>
+                <p><span class="orange"></span>Manual</p>
+                <p><span class="red"></span>Missed</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PENDING View -->
+    <div *ngIf="selectedFilter === 'PENDING'">
+      <div class="escalated-content-section">
+        <ag-grid-angular
+          style="width: 100%; height: 400px"
+         theme="legacy"
+          class="ag-theme-alpine"
+          [rowData]="pendingRowData"
+          [columnDefs]="pendingColumnDefs"
+          [defaultColDef]="defaultColDef"
+          [pagination]="true"
+          [paginationPageSize]="10"
+          (gridReady)="onGridReady($event)"
+          (cellClicked)="onCellClicked($event)"
+        >
+        </ag-grid-angular>
+      </div>
+    </div>
+
+    <!-- AG Grid sample table -->
+    <div *ngIf="selectedFilter === 'CLOSED'">
+      <div class="escalated-content-section">
+        <ag-grid-angular
+          style="width: 100%; height: 460px"
+          theme="legacy"
+          class="ag-theme-alpine"
+          [rowData]="rowData"
+          [columnDefs]="columnDefs"
+          [defaultColDef]="{ resizable: true,}"
+          [pagination]="true"
+          [paginationPageSize]="10"
+          [localeText]="localeText"
+          (gridReady)="onGridReady($event)"
+          (cellClicked)="onCellClicked($event)"
+        >
+        </ag-grid-angular>
+      </div>
+    </div>
+
+
+  </div>
+</div>

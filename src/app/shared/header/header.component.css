@@ -1,0 +1,188 @@
+@font-face {
+  font-family: 'Neometric Regular';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Neometric'), url('https://fonts.cdnfonts.com/s/18720/Neometric-Regular.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Neometric Bold';
+    font-style: normal;
+    font-weight: 600;
+    src: local('Neometric'), url('https://fonts.cdnfonts.com/s/18720/Unnamed Bold (Regular).woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Neometric Medium';
+    font-style: normal;
+    font-weight: 500;
+    src: local('Neometric'), url('https://fonts.cdnfonts.com/s/18720/Neometric Medium (Regular).woff') format('woff');
+}
+
+/* === HEADER === */
+.header {
+  display: grid;
+  grid-template-columns: 1fr 10px 9fr 10px 2fr;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #f9f9f9;
+  border-bottom: 1px solid #ddd;
+}
+
+.username{
+  font-family: 'Neometric Medium';
+  font-size: 14px;
+  /* color: #333;   */
+  margin: 0px;
+}
+
+.username{
+  font-family: 'Neometric Bold';
+  font-size: 14px;
+  /* color: #333;   */
+  margin: 0px;
+}
+
+
+.userPosition{
+  font-family: 'Neometric Regular';
+  font-size: 12px;
+  /* color: #666; */
+  margin: 0px;
+}
+
+.header-section {
+  display: flex;
+  align-items: center;
+}
+
+a.active svg path {
+  fill: #ED3237; /* Turns the SVG red when active */
+}
+
+a svg path {
+  fill: #40404065; /* Default color */
+  /* opacity: 25%; */
+}
+
+.logo-img {
+  height: 45px;
+  vertical-align: middle;
+  margin-right: 10px;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.logo .ai {
+  color: red;
+}
+
+.logo .live {
+  background: red;
+  color: white;
+  padding: 2px 5px;
+  border-radius: 4px;
+  font-size: 12px;
+  margin-left: 5px;
+}
+
+.divider {
+  width: 1px;
+  height: 40px;
+  background-color: rgba(135, 128, 128, 0.479);
+}
+
+.nav {
+  justify-content: flex-start;
+}
+
+nav a {
+ 
+  display: inline-flex;
+  font-weight: 500; 
+  align-items: center;
+  margin: 0 10px;
+  text-decoration: none;
+  color: #444;
+    font-family: 'Neometric Medium' !important;
+  font-size: 12px !important;
+}
+
+nav a.active {
+  color: red;
+}
+
+nav a:hover {
+  color: darkred;
+}
+
+.user {
+  display: flex;
+  justify-content: space-around;
+}
+
+.user-icon {
+  font-size: 30px;
+  margin-right: 10px;
+}
+
+.ticket-icon{
+ cursor: pointer;
+    width: 40px;
+    height: 40px;
+    background-color: white;
+    display: inline-block;
+    border-radius: 50%;
+    margin-right: 6px;
+    border: 2px solid red;
+}
+.ticket-icon {
+  position: relative;
+  background: #fff; /* adjust if needed */
+  border-radius: 50%;
+  padding: 8px;
+  border: 2px solid red;
+  cursor: pointer;
+}
+
+.nav-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.ticket-count {
+    position: absolute;
+    top: -11px;
+    right: -11px;
+    background: red;
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    border-radius: 50%;
+    min-width: 30px;
+    text-align: center;
+    line-height: 20px;
+}
+
+
+.user-icon {
+ cursor: pointer;
+    width: 40px;
+    height: 40px;
+    background-color: white;
+    display: inline-block;
+    border-radius: 50%;
+    margin-right: 6px;
+    border: 2px solid red;
+}
+
+.nav-icon {
+  width: 17px;
+  height: 17px;
+  margin-right: 6px;
+}
