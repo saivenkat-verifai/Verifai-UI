@@ -26,10 +26,13 @@
     src: url('/assets/fonts/Nasalization Rg.otf') format('opentype'),
 }
 
+.m-t-20 {
+    margin-top: 20px;
+}
 
 /* === DASHBOARD CONTAINER === */
 .dashboard-container {
-font-family: 'Neometric Regular';
+    font-family: 'Neometric Regular';
     background-color: #f6f6f6;
 
 }
@@ -39,9 +42,59 @@ font-family: 'Neometric Regular';
     display: flex;
     flex-direction: column;
     padding: 20px;
-    height: calc(100vh - 150px);
+    height: calc(100vh - 100px);
     overflow-y: scroll;
 }
+
+/* === CENTER POPUP STYLES === */
+
+.center-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+}
+
+.popup-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.popup-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    width: 400px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.popup-body {
+    margin-top: 15px;
+}
+
+.close-btn {
+    cursor: pointer;
+    font-size: 20px;
+    border: none;
+    background: transparent;
+}
+
 
 /* === DASHBOARD CONTENT SECTION === */
 .dashboard-content-section {
@@ -50,14 +103,14 @@ font-family: 'Neometric Regular';
 
 .section-header {
     font-family: 'Neometric Bold';
-   
+
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
 
 .section-header h2 {
-     opacity: 0.15;
+    opacity: 0.15;
     font-size: 20px;
     font-family: 'Neometric Bold';
     font-weight: 600;
@@ -67,20 +120,139 @@ font-family: 'Neometric Regular';
 /* === CALENDAR SECTION BODY === */
 .calender-section-body {
     display: grid;
+    align-items: center;
     grid-template-columns: repeat(12, 1fr);
     gap: 16px;
 }
 
+.filters-title {
+    margin: 0;
+    font-weight: bold;
+    font-size: 12px;
+    font-family: 'Neometric Medium';
+
+}
+
+.period-dropdown {
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #ffffff;
+    background-color: #ff0000;
+    cursor: pointer;
+    color: #ffffff;
+    font-size: 12px;
+    font-family: 'Neometric Medium';
+}
+
+.filters {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.filter {
+    display: flex;
+    gap: 50px;
+    align-items: center;
+}
+
+.filter-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Toggle switch CSS */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.3s;
+    border-radius: 24px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.3s;
+    border-radius: 50%;
+}
+
+input:checked+.slider {
+    background-color: #4caf50;
+}
+
+input:checked+.slider:before {
+    transform: translateX(26px);
+}
+
 .calender-first-section {
-    grid-column: span 3;
+    grid-column: span 6;
 }
 
 .calender-second-section {
-    grid-column: span 6;
+    grid-column: span 3;
 }
 
 .calender-third-section {
     grid-column: span 3;
+}
+
+.calender-fifth-section {
+    grid-column: span 6;
+}
+
+.calender-sixth-section {
+    grid-column: span 5;
+}
+
+.calender-seventh-section {
+    grid-column: span 1;
+}
+
+.more-less-toggle button {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: white;
+    font-size: 14px;
+
+}
+
+.more-less-toggle .btn-text {
+    font-weight: bold;
+    font-size: 12px;
+    font-family: 'Neometric Medium';
+}
+
+.m-t-20 {
+    margin-top: 20px;
 }
 
 /* === FILTERS === */
@@ -89,22 +261,22 @@ font-family: 'Neometric Regular';
     gap: 0.5rem;
     margin-left: 1rem;
     height: 25px;
-   
+
 }
 
 :host ::ng-deep .custom-header {
-  font-family: 'Neometric Medium' !important;
-  font-size: 12px !important;
+    font-family: 'Neometric Medium' !important;
+    font-size: 12px !important;
 }
 
 :host ::ng-deep .custom-cell {
-  font-family: 'Neometric Medium' !important;
-  font-size: 12px !important;
+    font-family: 'Neometric Medium' !important;
+    font-size: 12px !important;
 }
 
 :host ::ng-deep .ag-paging-panel {
-  font-family: 'Neometric Medium' !important;
-  font-size: 12px !important;
+    font-family: 'Neometric Medium' !important;
+    font-size: 12px !important;
 }
 
 .filters button {
@@ -115,8 +287,8 @@ font-family: 'Neometric Regular';
     color: #444;
     cursor: pointer;
     transition: background 0.2s ease;
-      font-size: 12px;
-     font-family: 'Neometric Medium';
+    font-size: 12px;
+    font-family: 'Neometric Medium';
 }
 
 .filters button:hover {
@@ -178,8 +350,8 @@ font-family: 'Neometric Regular';
     align-items: center;
     width: 60%;
     flex-direction: row;
-      font-family: 'Neometric Bold';
-          font-size: 14px;
+    font-family: 'Neometric Bold';
+    font-size: 14px;
 }
 
 .popup-header {
@@ -187,7 +359,47 @@ font-family: 'Neometric Regular';
     background: #ED3237;
     color: #fff;
 
- 
+
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.play-text {
+    font-family: 'Neometric Bold';
+    font-size: 14px;
+    margin: 0px;
+}
+
+.dot-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 90px;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.dot-value {
+    color: rgb(237, 50, 55);
+    font-size: 14px;
+    margin: 0;
+    font-family: 'NasalizationLight';
+}
+
+.play-popup-header {
+    padding: 16px;
+    background: #ED3237;
+    color: #fff;
+
+
     border-bottom: 1px solid #ddd;
     display: flex;
     justify-content: space-between;
@@ -239,13 +451,13 @@ font-family: 'Neometric Regular';
 }
 
 .calendar-icon {
-  cursor: pointer;
-  width: 30px;
-  height: 30px;
-  background-color: #ff0000;
-  display: inline-block;
-  border-radius: 50%;
-  margin-right: 6px;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    background-color: #ff0000;
+    display: inline-block;
+    border-radius: 50%;
+    margin-right: 6px;
 }
 
 .calendar-controls {
@@ -258,9 +470,10 @@ font-family: 'Neometric Regular';
 .selected-date p {
     margin: 0;
     font-weight: bold;
-       font-size: 12px;
-     font-family: 'Neometric Medium';
+    font-size: 12px;
+    font-family: 'Neometric Medium';
 }
+
 
 .arrow {
     background-color: white;
@@ -277,12 +490,44 @@ font-family: 'Neometric Regular';
     transition: all 0.3s ease;
 }
 
+.more-less-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: white;
+}
+
+.more-less-btn .btn-text {
+    font-weight: bold;
+    font-size: 12px;
+    font-family: 'Neometric Medium';
+}
+
+.more-arrow {
+
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    cursor: pointer;
+
+    transition: all 0.3s ease;
+}
+
 /* component CSS or global styles */
 
 
 .ag-header-cell-label {
-  justify-content: flex-end;
+    justify-content: flex-end;
 }
+
 .arrow:hover {
     background-color: #f0f0f0;
     box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.2);
@@ -296,7 +541,7 @@ font-family: 'Neometric Regular';
     border-radius: 5px;
     cursor: pointer;
     font-size: 12px;
-     font-family: 'Neometric Medium';
+    font-family: 'Neometric Medium';
 }
 
 /* === CALENDAR ESCALATED SECTION === */
@@ -324,7 +569,7 @@ font-family: 'Neometric Regular';
 }
 
 .escalated-icon {
-   height: 18px;
+    height: 18px;
     width: 18px;
 }
 
@@ -332,11 +577,11 @@ font-family: 'Neometric Regular';
     margin: 0px;
     font-size: 12px;
     font-weight: 600;
-       font-family: 'NasalizationLight';
+    font-family: 'NasalizationLight';
 }
 
 .calender-escalated-card p {
- font-size: 14px;
+    font-size: 14px;
     margin: 0;
     font-family: 'NasalizationLight';
 }
@@ -402,11 +647,26 @@ font-family: 'Neometric Regular';
     font-size: 14px;
 }
 
+.arrow-up::before {
+    content: '↑';
+    /* Up arrow */
+    font-size: 14px;
+    /* adjust size if needed */
+    margin-left: 5px;
+}
+
+.arrow-down::before {
+    content: '↓';
+    /* Down arrow */
+    font-size: 14px;
+    /* adjust size if needed */
+    margin-left: 5px;
+}
 
 /* === ESCALATED CONTENT SECTION === */
-.escalated-content-section {
+/* .escalated-content-section {
     padding-bottom: 15px;
-}
+} */
 
 .escalated-section-body {
     display: grid;
@@ -415,7 +675,7 @@ font-family: 'Neometric Regular';
 }
 
 .first-section {
-    grid-column: span 9;
+    grid-column: span 12;
 }
 
 .second-section {
@@ -443,7 +703,7 @@ font-family: 'Neometric Regular';
     font-size: 14px;
     font-weight: bold;
     margin: 0;
-     font-family: 'NasalizationLight';
+    font-family: 'NasalizationLight';
 }
 
 /* === EVENT ESCALATED CARD === */
@@ -464,7 +724,7 @@ font-family: 'Neometric Regular';
     align-items: center;
     margin-top: 20px;
     font-size: 12px;
-     font-family: 'Neometric Medium';
+    font-family: 'Neometric Medium';
 }
 
 .green,

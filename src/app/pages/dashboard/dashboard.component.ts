@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { ESCALATED_COLORS } from 'src/app/shared/constants/chart-colors';
-import { CommonModule, DatePipe, UpperCasePipe } from '@angular/common';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { ColumnChartComponent } from '../../shared/column-chart/column-chart.component';
-import { LineChartComponent } from '../../shared/line-chart/line-chart.component';
-
+import { Component, OnInit } from "@angular/core";
+import { ESCALATED_COLORS } from "src/app/shared/constants/chart-colors";
+import { CommonModule, DatePipe, UpperCasePipe } from "@angular/common";
+import { MatNativeDateModule } from "@angular/material/core";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { ColumnChartComponent } from "../../shared/column-chart/column-chart.component";
+import { LineChartComponent } from "../../shared/line-chart/line-chart.component";
+import { HttpClient, HttpClientModule } from "@angular/common/http";
+import { DashboardService } from "./dashboard.service";
 
 interface IconData {
   iconPath: string;
@@ -41,10 +42,10 @@ interface EscalatedDetail {
 }
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css'],
-   standalone: true,
+  selector: "app-dashboard",
+  templateUrl: "./dashboard.component.html",
+  styleUrls: ["./dashboard.component.css"],
+  standalone: true,
   imports: [
     CommonModule,
     DatePipe,
@@ -52,200 +53,169 @@ interface EscalatedDetail {
     MatDatepickerModule,
     MatNativeDateModule,
     ColumnChartComponent,
-    LineChartComponent,
-    // other imports...
+    // LineChartComponent,
+    HttpClientModule,
   ],
 })
 export class DashboardComponent implements OnInit {
-  currentDate: Date = new Date(); // Initialize with today's date
-  totalEvents = 37000;
-  falseEvents = 33250;
-  escalated = 1750;
-  pending = 2000;
-  missed = 1500;
-
-  dashboardCards: DashboardCard[] = [
-    {
-      title: 'Total Events',
-      value: this.totalEvents,
-      color: 'red',
-       colordot: [
-        { iconcolor: '#FFC400', count: 366470 },
-        { iconcolor: '#53BF8B', count: 360 },
-      ],
-      icons: [
-        { iconPath: 'assets/home.svg', count: 300 },
-        { iconPath: 'assets/cam.svg', count: 1500 },
-      ],
-    },
-    {
-      title: 'False',
-      value: this.falseEvents,
-      percentage: 88,
-      color: 'white',
-     colordot: [
-        { iconcolor: '#FFC400', count: 33000 },
-        { iconcolor: '#53BF8B', count: 250 },
-      ],
-      icons: [
-        { iconPath: 'assets/home.svg', count: 300 },
-        { iconPath: 'assets/cam.svg', count: 1500 },
-      ],
-    },
-    {
-      title: 'Escalated',
-      value: this.escalated,
-      percentage: 5,
-      color: 'white',
-      colordot: [
-        { iconcolor: '#FFC400', count: 1700 },
-        { iconcolor: '#53BF8B', count: 50 },
-      ],
-      icons: [
-        { iconPath: 'assets/home.svg', count: 150 },
-        { iconPath: 'assets/cam.svg', count: 750 },
-      ],
-    },
-    {
-      title: 'Pending',
-      value: this.pending,
-      percentage: 7,
-      color: 'white',
-      colordot: [
-        { iconcolor: '#FFC400', count: 1950 },
-        { iconcolor: '#53BF8B', count: 50 },
-      ],
-      icons: [
-        { iconPath: 'assets/home.svg', count: 150 },
-        { iconPath: 'assets/cam.svg', count: 750 },
-      ],
-    },
-    {
-      title: 'Missed Well',
-      value: this.missed,
-      percentage: 7,
-      color: 'white',
-       colordot: [
-        { iconcolor: '#FFC400', count: 490 },
-        { iconcolor: '#53BF8B', count: 10 },
-      ],
-      icons: [
-        { iconPath: 'assets/home.svg', count: 20 },
-        { iconPath: 'assets/cam.svg', count: 100 },
-      ],
-    },
-  ];
-
-  escalatedDetails: EscalatedDetail[] = [
-    {
-      label: 'Missed',
-      value: 1500,
-      color: ESCALATED_COLORS[0],
-      colordot: [
-        { iconcolor: '#FFC400', count: 1590 },
-        { iconcolor: '#53BF8B', count: 10 },
-      ],
-      icons: [
-        { iconPath: 'assets/home.svg', count: 150 },
-        { iconPath: 'assets/cam.svg', count: 750 },
-      ],
-    },
-    {
-      label: 'Suspicious',
-      value: 200,
-      color: ESCALATED_COLORS[1],
-      colordot: [
-        { iconcolor: '#FFC400', count: 200 },
-        { iconcolor: '#53BF8B', count: 0 },
-      ],
-      icons: [
-        { iconPath: 'assets/home.svg', count: 150 },
-        { iconPath: 'assets/cam.svg', count: 750 },
-      ],
-    },
-    {
-      label: 'Deterred',
-      value: 30,
-      color: ESCALATED_COLORS[2],
-      colordot: [
-        { iconcolor: '#FFC400', count: 30 },
-        { iconcolor: '#53BF8B', count: 0 },
-      ],
-      icons: [
-        { iconPath: 'assets/home.svg', count: 150 },
-        { iconPath: 'assets/cam.svg', count: 750 },
-      ],
-    },
-    {
-      label: 'Intervention',
-      value: 10,
-      color: ESCALATED_COLORS[3],
-      colordot: [
-        { iconcolor: '#FFC400', count: 10 },
-        { iconcolor: '#53BF8B', count: 0 },
-      ],
-      icons: [
-        { iconPath: 'assets/home.svg', count: 150 },
-        { iconPath: 'assets/cam.svg', count: 750 },
-      ],
-    },
-    {
-      label: 'Arrest',
-      value: 6,
-      color: ESCALATED_COLORS[4],
-      colordot: [
-        { iconcolor: '#FFC400', count: 4 },
-        { iconcolor: '#53BF8B', count: 1 },
-      ],
-      icons: [
-        { iconPath: 'assets/home.svg', count: 150 },
-        { iconPath: 'assets/cam.svg', count: 750 },
-      ],
-    },
-    {
-      label: 'Information',
-      value: 5,
-      color: ESCALATED_COLORS[5],
-      colordot: [
-        { iconcolor: '#FFC400', count: 5 },
-        { iconcolor: '#53BF8B', count: 0 },
-      ],
-      icons: [
-        { iconPath: 'assets/home.svg', count: 150 },
-        { iconPath: 'assets/cam.svg', count: 750 },
-      ],
-    },
-  ];
-
-  escalatedGraph = [
-    { label: 'Missed', value: 1500, height: 85 },
-    { label: 'Suspicious', value: 200, height: 45 },
-    { label: 'Deterred', value: 30, height: 20 },
-    { label: 'Intervention', value: 10, height: 10 },
-    { label: 'Arrest', value: 5, height: 5 },
-    { label: 'Information', value: 5, height: 5 },
-  ];
-
-  compareGraph = [
-    { label: 'Missed', current: 1500, previous: 1150 },
-    { label: 'Suspicious', current: 200, previous: 450 },
-    { label: 'Deterred', current: 30, previous: 60 },
-    { label: 'Intervention', current: 10, previous: 30 },
-    { label: 'Arrest', current: 5, previous: 5 },
-    { label: 'Information', current: 5, previous: 5 },
-  ];
-
-  getCircleGradient(percent: number): string {
-    const deg = percent * 3.6; // % to degrees
-    return `conic-gradient(#e53935 ${deg}deg, #fce4ec 0deg)`;
-  }
-
-  selectedFilter: string = 'DAY';
+  currentDate: Date = new Date();
+  selectedFilter: string = "DAY";
   isCalendarPopupOpen = false;
   selectedDate: Date | null = null;
 
+  dashboardCards: DashboardCard[] = [];
+  escalatedDetails: EscalatedDetail[] = [];
+  escalatedGraph: any[] = [];
+  compareGraph: any[] = [];
+
+  constructor(private dashboardService: DashboardService) {}
+
   ngOnInit() {
-    this.selectedDate = new Date(); // Default to today
+    this.selectedDate = new Date();
+    this.loadDashboardData();
+  }
+
+  loadDashboardData() {
+    this.dashboardService.getEventCounts().subscribe((response) => {
+      this.mapDashboardCards(response);
+      this.mapEscalatedDetails(response.escalated.details);
+      this.mapGraphs(response.escalated.details);
+    });
+  }
+
+  
+  mapDashboardCards(data: any) {
+    this.dashboardCards = [
+      {
+        title: "Total Events",
+        value: data.totalEvents.total,
+        color: "red",
+        colordot: [
+          { iconcolor: "#FFC400", count: data.totalEvents.eventWall },
+          { iconcolor: "#53BF8B", count: data.totalEvents.manualWall },
+        ],
+        icons: [
+          { iconPath: "assets/home.svg", count: data.totalEvents.sitesCount },
+          { iconPath: "assets/cam.svg", count: data.totalEvents.cameraCount },
+        ],
+      },
+      {
+        title: "False",
+        value: data.false.total,
+        percentage: data.false.falsePercentage,
+        color: "white",
+        colordot: [
+          { iconcolor: "#FFC400", count: data.false.eventWall },
+          { iconcolor: "#53BF8B", count: data.false.manualWall },
+        ],
+        icons: [
+          { iconPath: "assets/home.svg", count: data.false.sitesCount },
+          { iconPath: "assets/cam.svg", count: data.false.cameraCount },
+        ],
+      },
+      {
+        title: "Escalated",
+        value: data.escalated.total,
+        percentage: data.escalated.escalatedPercentage,
+        color: "white",
+        colordot: [
+          {
+            iconcolor: "#FFC400",
+            count: Object.values(data.escalated.details).reduce(
+              (sum: number, d: any) => sum + d.eventWall,
+              0
+            ),
+          },
+          {
+            iconcolor: "#53BF8B",
+            count: Object.values(data.escalated.details).reduce(
+              (sum: number, d: any) => sum + d.manualWall,
+              0
+            ),
+          },
+        ],
+        icons: [
+          {
+            iconPath: "assets/home.svg",
+            count: Object.values(data.escalated.details).reduce(
+              (sum: number, d: any) => sum + d.sitesCount,
+              0
+            ),
+          },
+          {
+            iconPath: "assets/cam.svg",
+            count: Object.values(data.escalated.details).reduce(
+              (sum: number, d: any) => sum + d.cameraCount,
+              0
+            ),
+          },
+        ],
+      },
+      {
+        title: "Pending",
+        value: data.pending,
+        percentage: data.pendingPercentage,
+        color: "white",
+        colordot: [
+          { iconcolor: "#FFC400", count: data.eventWall },
+          { iconcolor: "#53BF8B", count: data.manualWall },
+        ],
+        icons: [
+          { iconPath: "assets/home.svg", count: data.sitesCount },
+          { iconPath: "assets/cam.svg", count: data.camerasCount },
+        ],
+      },
+      {
+        title: "Missed Wall",
+        value: data.missedWall.total,
+        percentage: data.missedWall.missedWallPercentage,
+        color: "white",
+        colordot: [
+          { iconcolor: "#FFC400", count: data.missedWall.eventWall },
+          { iconcolor: "#53BF8B", count: data.missedWall.manualWall },
+        ],
+        icons: [
+          { iconPath: "assets/home.svg", count: data.missedWall.sitesCount },
+          { iconPath: "assets/cam.svg", count: data.missedWall.cameraCount },
+        ],
+      },
+    ];
+  }
+
+  mapEscalatedDetails(details: any) {
+    this.escalatedDetails = Object.keys(details).map((key, index) => ({
+      label: key.charAt(0).toUpperCase() + key.slice(1),
+      value: details[key].total,
+      color: ESCALATED_COLORS[index] || "#000",
+      colordot: [
+        { iconcolor: "#FFC400", count: details[key].eventWall },
+        { iconcolor: "#53BF8B", count: details[key].manualWall },
+      ],
+      icons: [
+        { iconPath: "assets/home.svg", count: details[key].sitesCount },
+        { iconPath: "assets/cam.svg", count: details[key].cameraCount },
+      ],
+    }));
+  }
+
+  mapGraphs(details: any) {
+    this.escalatedGraph = Object.keys(details).map((key) => ({
+      label: key.charAt(0).toUpperCase() + key.slice(1),
+      value: details[key].total,
+      height: details[key].total, // optional: scale later for UI
+    }));
+
+    // Example compareGraph (you can adjust previous values if needed)
+    this.compareGraph = Object.keys(details).map((key) => ({
+      label: key.charAt(0).toUpperCase() + key.slice(1),
+      current: details[key].total,
+      previous: Math.floor(details[key].total * 0.8), // dummy previous value
+    }));
+  }
+
+  getCircleGradient(percent: number): string {
+    const deg = percent * 3.6;
+    return `conic-gradient(#e53935 ${deg}deg, #fce4ec 0deg)`;
   }
 
   setFilter(filter: string): void {

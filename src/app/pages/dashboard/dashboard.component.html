@@ -1,86 +1,55 @@
+
+
 <div class="dashboard-container">
   <div class="dashboard-content">
     <div class="dashboard-content-section">
       <div class="section-header">
         <h2>DASHBOARD</h2>
       </div>
-      <div class="section-body">
-        <!-- Add calendar section below the dashboard header -->
 
-        <div class="calendar-section-wrapper">
-          <div class="calendar-section">
-            <button class="calendar-icon" (click)="openCalendarPopup()">
-              <img src="assets/calender.svg" alt="Dashboard" class="nav-icon" />
-            </button>
+      <!-- Calendar Section -->
+      <div class="calendar-section-wrapper">
+        <div class="calendar-section">
+          <button class="calendar-icon" (click)="openCalendarPopup()">
+            <img src="assets/calender.svg" alt="Dashboard" class="nav-icon" />
+          </button>
 
-            <div class="calendar-controls">
-              <button class="arrow left-arrow" (click)="changeDate(-1)">
-                ←
-              </button>
+          <div class="calendar-controls">
+            <button class="arrow left-arrow" (click)="changeDate(-1)">←</button>
 
-              <div *ngIf="selectedDate" class="selected-date">
-                <p>{{ selectedDate | date : "dd MMMM, yyyy" }}</p>
-              </div>
-
-              <button class="arrow right-arrow" (click)="changeDate(1)">
-                →
-              </button>
+            <div *ngIf="selectedDate" class="selected-date">
+              <p>{{ selectedDate | date : "dd MMMM, yyyy" }}</p>
             </div>
 
-            <button class="today-button" (click)="setToday()">TODAY</button>
+            <button class="arrow right-arrow" (click)="changeDate(1)">→</button>
           </div>
-        </div>
 
-        <!-- Calendar Popup -->
-        <div
-          class="calendar-popup-overlay"
-          *ngIf="isCalendarPopupOpen"
-          (click)="closeCalendarPopup()"
-        ></div>
-
-        <div class="calendar-popup" *ngIf="isCalendarPopupOpen">
-          <div class="popup-header">
-            <h3>Calendar</h3>
-            <button class="close-button" (click)="closeCalendarPopup()">
-              ✖
-            </button>
-          </div>
-          <div class="popup-content">
-            <mat-calendar
-              [(selected)]="selectedDate"
-              (selectedChange)="onDateSelected($event)"
-            ></mat-calendar>
-          </div>
-        </div>
-
-        <div class="filters">
-          <button
-            [class.active]="selectedFilter === 'DAY'"
-            (click)="setFilter('DAY')"
-          >
-            DAY
-          </button>
-          <button
-            [class.active]="selectedFilter === 'WEEK'"
-            (click)="setFilter('WEEK')"
-          >
-            WEEK
-          </button>
-          <button
-            [class.active]="selectedFilter === 'MONTH'"
-            (click)="setFilter('MONTH')"
-          >
-            MONTH
-          </button>
-          <button
-            [class.active]="selectedFilter === 'YEAR'"
-            (click)="setFilter('YEAR')"
-          >
-            YEAR
-          </button>
+          <button class="today-button" (click)="setToday()">TODAY</button>
         </div>
       </div>
 
+      <!-- Calendar Popup -->
+      <div
+        class="calendar-popup-overlay"
+        *ngIf="isCalendarPopupOpen"
+        (click)="closeCalendarPopup()"
+      ></div>
+
+      <div class="calendar-popup" *ngIf="isCalendarPopupOpen">
+        <div class="popup-header">
+          <h3>Calendar</h3>
+          <button class="close-button" (click)="closeCalendarPopup()">✖</button>
+        </div>
+        <div class="popup-content">
+          <mat-calendar
+            [(selected)]="selectedDate"
+            (selectedChange)="onDateSelected($event)"
+          ></mat-calendar>
+        </div>
+      </div>
+
+
+      <!-- Dashboard Cards -->
       <div class="cards-row">
         <div
           class="card"
@@ -103,6 +72,7 @@
               </p>
             </div>
 
+            <!-- Percentage Circle -->
             <div class="card-top-right" *ngIf="card.percentage !== undefined">
               <div class="circle-chart">
                 <div
@@ -115,7 +85,7 @@
           </div>
 
           <div class="icons-row">
-            <!-- Colored dots (left side, stacked) -->
+            <!-- Colored Dots -->
             <div class="dots-column">
               <div class="icon" *ngFor="let dot of card.colordot">
                 <span
@@ -126,7 +96,7 @@
               </div>
             </div>
 
-            <!-- Icons (right side, inline) -->
+            <!-- Icons -->
             <div class="icons-group">
               <div class="icon" *ngFor="let icon of card.icons">
                 <img [src]="icon.iconPath" alt="icon" />
@@ -138,6 +108,7 @@
       </div>
     </div>
 
+    <!-- Escalated Section -->
     <div class="escalated-content-section">
       <div class="section-header">
         <h2>ESCALATED</h2>
@@ -150,46 +121,39 @@
               <p [ngStyle]="{ color: e.color }">{{ e.value }}</p>
             </div>
 
-            <!-- <div class="icons" *ngIf="e.icons">
-              <div class="icon-section" *ngFor="let icon of e.icons">
-                <img
-                  [src]="icon.iconPath"
-                  alt="icon"
-                  class="icon-image"
-                  [ngClass]="{ 'cam-icon': icon.iconPath.includes('cam.png') }"
-                />
-                <span>{{ icon.count }}</span>
+            <div class="icons">
+              <!-- Dots -->
+              <div class="dots-column" *ngIf="e.colordot">
+                <div class="icon-section" *ngFor="let dot of e.colordot">
+                  <span
+                    class="dot"
+                    [ngStyle]="{ 'background-color': dot.iconcolor }"
+                  ></span>
+                  <span>{{ dot.count }}</span>
+                </div>
               </div>
-            </div> -->
-<div class="icons">
-  <!-- Left side: colored dots -->
-  <div class="dots-column" *ngIf="e.colordot">
-    <div class="icon-section" *ngFor="let dot of e.colordot">
-      <span class="dot" [ngStyle]="{ 'background-color': dot.iconcolor }"></span>
-      <span>{{ dot.count }}</span>
-    </div>
-  </div>
 
-  <!-- Right side: icons -->
-  <div class="icons-group" *ngIf="e.icons">
-    <div class="icon-section" *ngFor="let icon of e.icons">
-      <img
-        [src]="icon.iconPath"
-        alt="icon"
-        class="icon-image"
-        [ngClass]="{ 'cam-icon': icon.iconPath.includes('cam.png') }"
-      />
-      <span>{{ icon.count }}</span>
-    </div>
-  </div>
-</div>
-
-
+              <!-- Icons -->
+              <div class="icons-group" *ngIf="e.icons">
+                <div class="icon-section" *ngFor="let icon of e.icons">
+                  <img
+                    [src]="icon.iconPath"
+                    alt="icon"
+                    class="icon-image"
+                    [ngClass]="{
+                      'cam-icon': icon.iconPath.includes('cam.svg')
+                    }"
+                  />
+                  <span>{{ icon.count }}</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
+    <!-- Charts -->
     <div class="chart-content-section">
       <div class="section-header">
         <h2>ESCALATED GRAPH</h2>
@@ -197,24 +161,17 @@
       <div class="chart-section-body">
         <div class="chart-section">
           <div class="chart-container">
-            <app-column-chart chartMode="escalated"></app-column-chart>
+            <app-column-chart
+              chartMode="escalated"
+              [chartData]="escalatedGraph"
+            >
+            </app-column-chart>
           </div>
-
-          <div class="chart-container">
+          <!-- <div class="chart-container">
             <app-line-chart chartMode="solarEmployment"></app-line-chart>
-          </div>
+          </div> -->
         </div>
       </div>
-      <!-- <div class="section-body">
-      <div class="chart-section">
-        <div class="chart-container">
-          <app-line-chart chartMode="solarEmployment"></app-line-chart>
-        </div>
-        <div class="chart-container">
-         
-        </div>
-      </div>
-       </div> -->
     </div>
   </div>
 </div>

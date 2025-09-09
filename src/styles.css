@@ -27,6 +27,10 @@ body { margin: 0; font-family: Neometric 2; }
   width: 100%;
 }
 
+.ag-root .ag-header-row {
+  justify-content: flex-end !important;
+}
+
 .mat-calendar {
   border: 1px solid #ccc;
   border-radius: 8px;

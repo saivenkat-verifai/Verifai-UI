@@ -21,12 +21,17 @@
 
       <div class="calender-section-body">
         <!-- Add calendar section below the dashboard header -->
-
         <div class="calendar-section-wrapper calender-first-section">
           <div class="calendar-section">
-            <button class="calendar-icon" (click)="openCalendarPopup()">
-              <img src="assets/calender.svg" alt="Dashboard" class="nav-icon" />
-            </button>
+            <div class="filter-item">
+              <select class="period-dropdown">
+                <option value="day">Day</option>
+                <option value="week">Week</option>
+                <option value="month">Month</option>
+                <option value="custom">Custom</option>
+              </select>
+            </div>
+            <button class="today-button" (click)="setToday()">TODAY</button>
 
             <div class="calendar-controls">
               <button class="arrow left-arrow" (click)="changeDate(-1)">
@@ -34,39 +39,70 @@
               </button>
 
               <div *ngIf="selectedDate" class="selected-date">
-                <p>{{ selectedDate | date : "dd MMMM, yyyy" }}</p>
+                <p>
+                  {{ selectedDate | date : "dd MMMM, yyyy" }} -
+                  {{ selectedDate | date : "dd MMMM, yyyy" }}
+                </p>
               </div>
 
               <button class="arrow right-arrow" (click)="changeDate(1)">
                 →
               </button>
             </div>
-
-            <button class="today-button" (click)="setToday()">TODAY</button>
+            <button class="calendar-icon" (click)="openCalendarPopup()">
+              <img src="assets/calender.svg" alt="Dashboard" class="nav-icon" />
+            </button>
           </div>
         </div>
-
+        <!-- Toggle Switches -->
         <div class="escalated-section calender-second-section">
-          <div
-            class="calender-escalated-card"
-            *ngFor="let e of secondEscalatedDetails"
-            (click)="openPopup(e)"
-          >
-            <div class="calender-escalated-card-content">
-              <!-- Show label if present -->
-              <ng-container *ngIf="e.label; else iconTemplate">
-                <h4>{{ e.label }}</h4>
-              </ng-container>
+          <div class="filter" *ngIf="selectedFilter === 'CLOSED'">
+            <div class="filter-item">
+              <h3 class="filters-title">SUSPCIOUS</h3>
+              <label class="switch">
+                <input type="checkbox" />
+                <span class="slider round"></span>
+              </label>
+            </div>
 
-              <!-- Show icon if label not present -->
-              <ng-template #iconTemplate>
-                <img [src]="e.iconPath" alt="icon" class="escalated-icon" />
-              </ng-template>
-              <p [ngStyle]="{ color: e.color }">{{ e.value }}</p>
+            <div class="filter-item">
+              <h3 class="filters-title">FALSE</h3>
+              <label class="switch">
+                <input type="checkbox" />
+                <span class="slider round"></span>
+              </label>
+            </div>
+          </div>
+          <div class="filter" *ngIf="selectedFilter === 'PENDING'">
+            <div class="filter-item">
+              <h3 class="filters-title">WALLS</h3>
+              <label class="switch">
+                <input type="checkbox" />
+                <span class="slider round"></span>
+              </label>
+            </div>
+
+            <div class="filter-item">
+              <h3 class="filters-title">GROUPS</h3>
+              <label class="switch">
+                <input type="checkbox" />
+                <span class="slider round"></span>
+              </label>
             </div>
           </div>
         </div>
-
+        <!-- end    -->
+        <div class="calender-escalated-section calender-third-section">
+          <!-- Search bar -->
+          <div class="search-wrapper">
+            <input
+              type="text"
+              placeholder="Search here"
+              [(ngModel)]="searchTerm"
+              class="search-input"
+            />
+          </div>
+        </div>
         <!-- Right-side Popup -->
         <div class="right-popup" *ngIf="isPopupVisible">
           <div class="popup-header">
@@ -92,7 +128,7 @@
               <ag-grid-angular
                 style="width: 100%; height: 100vh"
                 class="ag-theme-alpine"
-                 theme="legacy"
+                theme="legacy"
                 [rowData]="popupRowData"
                 [columnDefs]="popupColumnDefs"
                 [defaultColDef]="{
@@ -134,16 +170,36 @@
           </div>
         </div>
 
-        <!-- end    -->
-        <div class="calender-escalated-section calender-third-section">
-          <!-- Search bar -->
-          <div class="search-wrapper">
-            <input
-              type="text"
-              placeholder="Search here"
-              [(ngModel)]="searchTerm"
-              class="search-input"
-            />
+        <!-- Centered Popup for PLAY ICON -->
+        <div class="center-popup" *ngIf="isPlayPopupVisible">
+          <div class="popup-overlay" (click)="closePlayPopup()"></div>
+          <div class="popup-content">
+            <div class="play-popup-header">
+              <p class="play-text">
+                <strong>DEVICE ID:</strong> {{ selectedPlayItem?.device }}
+              </p>
+              <button class="close-btn" (click)="closePlayPopup()">×</button>
+            </div>
+            <div class="popup-body">
+              <div *ngIf="selectedPlayItem?.videoFile?.length; else noVideo">
+                <div class="carousel">
+                  <button class="carousel-btn" (click)="prevSlide()">‹</button>
+                  <img
+                    [src]="selectedPlayItem.videoFile[currentSlideIndex]"
+                    alt="Slide Image"
+                  />
+                  <button class="carousel-btn" (click)="nextSlide()">›</button>
+                </div>
+                <p class="slide-counter">
+                  {{ currentSlideIndex + 1 }} /
+                  {{ selectedPlayItem.videoFile.length }}
+                </p>
+              </div>
+
+              <ng-template #noVideo>
+                <p>No video available</p>
+              </ng-template>
+            </div>
           </div>
         </div>
 
@@ -169,74 +225,120 @@
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- CLOSED View -->
-    <div *ngIf="selectedFilter === 'CLOSED'">
-      <div class="escalated-content-section">
-        <div class="escalated-section-body">
-          <div class="escalated-section first-section">
-            <div class="escalated-card" *ngFor="let e of escalatedDetails">
-              <div class="escalated-card-content">
-                <p [ngStyle]="{ color: e.color }">{{ e.value }}</p>
+      <div class="calender-section-body m-t-20">
+        <!-- Calendar cards -->
+        <div class="escalated-section calender-fifth-section">
+          <div
+            class="calender-escalated-card"
+            *ngFor="let e of secondEscalatedDetails"
+            (click)="openPopup(e)"
+          >
+            <div class="calender-escalated-card-content">
+              <!-- Show label if present -->
+              <ng-container *ngIf="e.label; else nonLabelTemplate">
                 <h4>{{ e.label }}</h4>
-              </div>
+                <p [ngStyle]="{ color: e.color }">{{ e.value }}</p>
+              </ng-container>
+
+              <!-- Show icon or color dot if no label -->
+              <ng-template #nonLabelTemplate>
+                <!-- If iconPath -->
+                <ng-container *ngIf="e.iconPath; else colorDotTemplate">
+                  <img [src]="e.iconPath" alt="icon" class="escalated-icon" />
+                  <p [ngStyle]="{ color: e.color }">{{ e.value }}</p>
+                </ng-container>
+
+                <!-- If iconcolor -->
+                <ng-template #colorDotTemplate>
+                  <div class="dot-item">
+                    <span
+                      class="dot"
+                      [style.background-color]="e.iconcolor"
+                    ></span>
+                    <span class="dot-value">{{ e.value }}</span>
+                  </div>
+                </ng-template>
+              </ng-template>
             </div>
           </div>
+        </div>
+        <div class="escalated-section calender-sixth-section"></div>
+        <!-- More/Less toggle button -->
+        <div
+          class="escalated-section calender-seventh-section"
+          *ngIf="selectedFilter === 'CLOSED'"
+        >
+          <div class="more-less-toggle" (click)="toggleMore()">
+            <button>
+              <span class="btn-text">{{ showMore ? "Less" : "More" }}</span>
+              <span class="more-arrow">
+                <i [ngClass]="showMore ? 'arrow-up' : 'arrow-down'"></i>
+              </span>
+            </button>
+          </div>
 
-          <div class="escalated-section second-section">
-            <!-- second section content -->
-            <div class="event-escalated-card event-card">
-              <div class="event-escalated-card-content">
-                <p><span class="green"></span>Event</p>
-                <p><span class="orange"></span>Manual</p>
-                <p><span class="red"></span>Missed</p>
+          <!-- Expandable section -->
+        </div>
+      </div>
+
+      <!-- PENDING View -->
+
+      <div class="m-t-20" *ngIf="selectedFilter === 'PENDING'">
+        <div class="escalated-content-section">
+          <ag-grid-angular
+            style="width: 100%"
+            theme="legacy"
+            class="ag-theme-alpine"
+            [rowData]="pendingRowData"
+            [columnDefs]="pendingColumnDefs"
+            [defaultColDef]="defaultColDef"
+            [pagination]="true"
+            [paginationPageSize]="10"
+            domLayout="autoHeight"
+            [paginationPageSizeSelector]="[10, 20, 50, 100]"
+            (gridReady)="onGridReady($event)"
+            (cellClicked)="onCellClicked($event)"
+          >
+          </ag-grid-angular>
+        </div>
+      </div>
+      <div class="m-t-20" *ngIf="showMore">
+        <div class="escalated-content-section">
+          <div class="escalated-section-body">
+            <div class="escalated-section first-section">
+              <div class="escalated-card" *ngFor="let e of escalatedDetails">
+                <div class="escalated-card-content">
+                  <p [ngStyle]="{ color: e.color }">{{ e.value }}</p>
+                  <h4>{{ e.label }}</h4>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- PENDING View -->
-    <div *ngIf="selectedFilter === 'PENDING'">
-      <div class="escalated-content-section">
-        <ag-grid-angular
-          style="width: 100%; height: 400px"
-         theme="legacy"
-          class="ag-theme-alpine"
-          [rowData]="pendingRowData"
-          [columnDefs]="pendingColumnDefs"
-          [defaultColDef]="defaultColDef"
-          [pagination]="true"
-          [paginationPageSize]="10"
-          (gridReady)="onGridReady($event)"
-          (cellClicked)="onCellClicked($event)"
-        >
-        </ag-grid-angular>
+      <!-- AG Grid sample table -->
+      <div class="m-t-20" *ngIf="selectedFilter === 'CLOSED'">
+        <div class="escalated-content-section">
+          <ag-grid-angular
+            style="width: 100%"
+            theme="legacy"
+            class="ag-theme-alpine"
+            [rowData]="rowData"
+            [columnDefs]="columnDefs"
+            [defaultColDef]="{ resizable: true,}"
+            [pagination]="true"
+            [paginationPageSize]="10"
+            [paginationPageSizeSelector]="[10, 20, 50, 100]"
+            [localeText]="localeText"
+            domLayout="autoHeight"
+            (gridReady)="onGridReady($event)"
+            (cellClicked)="onCellClicked($event)"
+          >
+          </ag-grid-angular>
+        </div>
       </div>
     </div>
-
-    <!-- AG Grid sample table -->
-    <div *ngIf="selectedFilter === 'CLOSED'">
-      <div class="escalated-content-section">
-        <ag-grid-angular
-          style="width: 100%; height: 460px"
-          theme="legacy"
-          class="ag-theme-alpine"
-          [rowData]="rowData"
-          [columnDefs]="columnDefs"
-          [defaultColDef]="{ resizable: true,}"
-          [pagination]="true"
-          [paginationPageSize]="10"
-          [localeText]="localeText"
-          (gridReady)="onGridReady($event)"
-          (cellClicked)="onCellClicked($event)"
-        >
-        </ag-grid-angular>
-      </div>
-    </div>
-
-
   </div>
 </div>

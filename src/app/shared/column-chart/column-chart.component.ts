@@ -1,114 +1,105 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import * as Highcharts from 'highcharts';
-import { ESCALATED_COLORS } from 'src/app/shared/constants/chart-colors';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { HighchartsChartModule } from 'highcharts-angular';
+import {
+  Component,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  AfterViewInit,
+} from "@angular/core";
+import * as Highcharts from "highcharts";
+import { HighchartsChartModule } from "highcharts-angular";
+import { CommonModule } from "@angular/common";
+import { ESCALATED_COLORS } from "src/app/shared/constants/chart-colors";
 
 @Component({
-  selector: 'app-column-chart',
-  templateUrl: './column-chart.component.html',
-  styleUrls: ['./column-chart.component.css'],
+  selector: "app-column-chart",
+  templateUrl: "./column-chart.component.html",
+  styleUrls: ["./column-chart.component.css"],
   standalone: true,
-  imports: [CommonModule, FormsModule
-    , HighchartsChartModule
+  imports: [
+    CommonModule, // ✅ for *ngIf
+    HighchartsChartModule, // ✅ so <highcharts-chart> works
   ],
 })
-export class ColumnChartComponent implements OnChanges {
-  @Input() chartMode: 'escalated' | 'compare' = 'escalated';
+export class ColumnChartComponent implements OnChanges, AfterViewInit {
+  @Input() chartMode: string = "";
+  @Input() chartData: any[] = [];
+  @Input() compareData: any[] = [];
 
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions: Highcharts.Options = {};
+  chartRendered = false;
 
-  private categories = ['Misd', 'Susp', 'Detr', 'Inte', 'arst', 'Info'];
-
-  private escalatedSeries: Highcharts.SeriesOptionsType[] = [
-  {
-    name: 'escalated',
-    type: 'column',
-    data: [
-      { y: 1500, color: ESCALATED_COLORS[0] },
-      { y: 200, color: ESCALATED_COLORS[1] },
-      { y: 30, color: ESCALATED_COLORS[2] },
-      { y: 10, color: ESCALATED_COLORS[3] },
-      { y: 6, color: ESCALATED_COLORS[4] },
-      { y: 5, color: ESCALATED_COLORS[5] },
-    ],
-  },
-];
- 
-  private compareSeries: Highcharts.SeriesOptionsType[] = [
-    {
-      name: 'escalated',
-      type: 'column',
-      data: [
-        { y: 1500, color: '#33b77a' },
-        { y: 200, color: '#1f77c0' },
-        { y: 30, color: '#a97ff4' },
-        { y: 10, color: '#f4cb57' },
-        { y: 6, color: '#c63d5e' },
-        { y: 5, color: '#677381' },
-      ],
-    },
-    {
-      name: 'compare',
-      type: 'column',
-      data: [
-        { y: 1150, color: '#000' },
-        { y: 450, color: '#000' },
-        { y: 60, color: '#000' },
-        { y: 30, color: '#000' },
-        { y: 0, color: '#000' },
-        { y: 0, color: '#000' },
-      ],
-    },
-  ];
+  ngAfterViewInit(): void {
+    if (this.chartData?.length) {
+      this.renderChart();
+    }
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
-    let title = '';
-    let series: Highcharts.SeriesOptionsType[] = [];
+    if (
+      (changes["chartData"] && !changes["chartData"].firstChange) ||
+      (changes["compareData"] && !changes["compareData"].firstChange)
+    ) {
+      this.renderChart();
+    }
+  }
 
-    if (this.chartMode === 'escalated') {
-      title = 'ESCALATED Graph';
-      series = this.escalatedSeries;
-    } else if (this.chartMode === 'compare') {
-      title = 'Compare Graph';
-      series = this.compareSeries;
+  private renderChart(): void {
+    if (!this.chartData || this.chartData.length === 0) {
+      this.chartRendered = false;
+      return;
     }
 
-    this.chartOptions = {
-      chart: {
-        type: 'column',
-      },
-      title: {
-        text: title,
-      },
-      xAxis: {
-        categories: this.categories,
-        crosshair: true,
-        accessibility: {
-          description: 'Categories',
+    if (this.compareData && this.compareData.length > 0) {
+      this.chartOptions = {
+        chart: { type: "column" },
+        title: { text: `${this.chartMode.toUpperCase()} Compare` },
+        xAxis: { categories: this.compareData.map((d) => d.label) },
+        yAxis: { title: { text: "Count" } },
+        plotOptions: {
+          column: { borderRadius: 25 },
         },
-      },
-      yAxis: {
-        min: 0,
-        title: { text: '' },
-      },
-      plotOptions: {
-        column: {
-          borderRadius: 10,
-          pointPadding: 0.2,
-          borderWidth: 0,
-          dataLabels: {
-            enabled: true,
-            style: {
-              fontWeight: 'bold',
-              color: 'black',
-            },
+        series: [
+          {
+            type: "column",
+            name: "Current",
+            data: this.compareData.map((d, i) => ({
+              y: d.current,
+              color: ESCALATED_COLORS[i % ESCALATED_COLORS.length],
+            })),
           },
+          { 
+            type: "column",
+            name: "Previous",
+            data: this.compareData.map((d, i) => ({
+              y: d.previous,
+              color: ESCALATED_COLORS[i % ESCALATED_COLORS.length],
+            })),
+          },
+        ],
+      };
+    } else {
+      this.chartOptions = {
+        chart: { type: "column" },
+        title: { text: `${this.chartMode.toUpperCase()} Chart` },
+        xAxis: { categories: this.chartData.map((d) => d.label) },
+        yAxis: { title: { text: "Count" } },
+        plotOptions: {
+          column: { borderRadius: 25 , pointWidth: 25, },
         },
-      },
-      series: series,
-    };
+        series: [
+          {
+            type: "column",
+            name: this.chartMode,
+            data: this.chartData.map((d, i) => ({
+              y: d.value,
+              color: ESCALATED_COLORS[i % ESCALATED_COLORS.length],
+            })),
+          },
+        ],
+      };
+    }
+
+    this.chartRendered = true;
   }
 }
