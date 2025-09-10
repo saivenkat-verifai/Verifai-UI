@@ -22,6 +22,7 @@
     "@angular/router": "^17.3.0",
     "ag-grid-angular": "^34.1.2",
     "ag-grid-community": "^34.1.2",
+    "ag-grid-enterprise": "^34.1.2",
     "highcharts": "^12.3.0",
     "highcharts-angular": "^3.0.0",
     "rxjs": "~7.8.0",

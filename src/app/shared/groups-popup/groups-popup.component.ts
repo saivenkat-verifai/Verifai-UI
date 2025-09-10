@@ -11,6 +11,11 @@ import { MatNativeDateModule } from "@angular/material/core";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { ColDef, GridReadyEvent } from "ag-grid-community";
 import { CommonModule } from "@angular/common";
+import { ModuleRegistry } from "ag-grid-community";
+import { TreeDataModule } from "ag-grid-enterprise";
+
+// Register the TreeDataModule for tree data feature
+ModuleRegistry.registerModules([TreeDataModule]);
 
 @Component({
   selector: "app-groups-popup",
@@ -30,31 +35,42 @@ export class GroupsPopupComponent implements OnChanges {
   @Input() selectedItem: any;
   @Input() selectedDate: Date | null = null;
   @Input() data: any; // Receives second API data: { groupSites, groupUsers }
+
   @Output() sectionChange = new EventEmitter<string>();
-
   @Output() close = new EventEmitter<void>();
-
   @Output() openPopupEvent = new EventEmitter<any>();
 
-  openSection(section: string) {
-    this.sectionChange.emit(section);
-    this.showPopup = false;
-  }
+  showPopup = false;
 
-  /** Columns for groupSites AG Grid */
+autoGroupColumnDef: ColDef = {
+  headerName: 'SITE ID',
+  field: 'siteId',
+  cellRendererParams: {
+    suppressCount: true, // removes child count (optional)
+  },
+  valueGetter: (params) => {
+    return params.data && !params.data.isCamera ? params.data.siteId : '';
+  }
+};
+
+  /** Columns for Sites AG Grid */
   sitesColumnDefs: ColDef[] = [
-    { headerName: "SITE ID", field: "siteId", cellClass: "custom-cell" },
-    { headerName: "SITE NAME", field: "siteName", cellClass: "custom-cell" },
-    // { headerName: 'STATUS', field: 'status', cellClass: 'custom-cell' },
-    {
-      headerName: "CAMERAS",
-      field: "totalCamerasCount",
-      cellClass: "custom-cell",
-    },
-    // { headerName: 'TOTAL CAMERAS', field: 'totalCamerasCount', cellClass: 'custom-cell' },
+  {
+    headerName: "SITE / CAMERA NAME",
+    field: "siteName",
+    cellClass: "custom-cell",
+    valueGetter: (params) =>
+      params.data.isCamera ? params.data.cameraName : params.data.siteName,
+  },
+  {
+    headerName: "CAMERAS",
+    field: "totalCamerasCount",
+    cellClass: "custom-cell",
+    valueGetter: (params) => (params.data.isCamera ? "" : params.data.totalCamerasCount),
+  },
   ];
 
-  /** Columns for groupUsers AG Grid */
+  /** Columns for Users AG Grid */
   usersColumnDefs: ColDef[] = [
     { headerName: "USER ID", field: "userId", cellClass: "custom-cell" },
     { headerName: "NAME", field: "User_Name", cellClass: "custom-cell" },
@@ -62,47 +78,70 @@ export class GroupsPopupComponent implements OnChanges {
     { headerName: "STATUS", field: "status", cellClass: "custom-cell" },
   ];
 
-  toggleStatus(isActive: boolean) {
-    this.data.status = isActive ? "ACTIVE" : "INACTIVE";
-  }
-
+  /** Default column definition */
   defaultColDef: ColDef = {
     sortable: true,
     filter: true,
+    resizable: true,
   };
 
-  /** Separate rowData for sites and users */
+  /** Row data arrays */
   sitesRowData: any[] = [];
   usersRowData: any[] = [];
 
-  showPopup = false;
-
+  /** Handle popup toggle */
   togglePopup() {
     this.showPopup = !this.showPopup;
-    this.openPopupEvent.emit(this.data); // send current group to parent
+    this.openPopupEvent.emit(this.data);
   }
+
   openPopup(groupData: any) {
-    console.log("Opening popup for group:", groupData);
-    this.data = groupData; // the dropdown will now show this
+    this.data = groupData;
     this.showPopup = true;
   }
 
+  openSection(section: string) {
+    this.sectionChange.emit(section);
+    this.showPopup = false;
+  }
+
+  toggleStatus(isActive: boolean) {
+    if (this.data) {
+      this.data.status = isActive ? "ACTIVE" : "INACTIVE";
+    }
+  }
+
+  /** ngOnChanges to transform API data for tree structure */
   ngOnChanges() {
     if (this.data) {
-      // Map groupSites to sitesRowData
+      this.sitesRowData = [];
+
       if (Array.isArray(this.data.groupSites)) {
-        this.sitesRowData = this.data.groupSites.map((site: any) => ({
-          siteId: site.siteId,
-          siteName: site.siteName,
-          status: site.status,
-          groupSitesCamerasCount: site.groupSitesCamerasCount,
-          totalCamerasCount: site.totalCamerasCount,
-        }));
-      } else {
-        this.sitesRowData = [];
+        this.data.groupSites.forEach((site: any) => {
+          // Add parent row
+          this.sitesRowData.push({
+            siteId: site.siteId,
+            siteName: site.siteName,
+            status: site.status,
+            totalCamerasCount: site.totalCamerasCount,
+            isCamera: false, // parent
+          });
+
+          // Add child camera rows
+          const cameras = Array.from(
+            { length: site.totalCamerasCount },
+            (_, i) => ({
+              siteId: site.siteId,
+              cameraName: `mdx-cam${i + 1}`,
+              isCamera: true,
+            })
+          );
+
+          this.sitesRowData.push(...cameras);
+        });
       }
 
-      // Map groupUsers to usersRowData
+      // Users row data
       if (Array.isArray(this.data.groupUsers)) {
         this.usersRowData = this.data.groupUsers.map((user: any) => ({
           userId: user.userId,
@@ -116,12 +155,20 @@ export class GroupsPopupComponent implements OnChanges {
     }
   }
 
-  /** AG Grid ready for sites */
+  /** AG Grid tree data hierarchy */
+  getDataPath = (data: any) => {
+    if (data.isCamera) {
+      return [data.siteId.toString(), data.cameraName]; // child path
+    } else {
+      return [data.siteId.toString()]; // parent path
+    }
+  };
+
+  /** AG Grid ready handlers */
   onSitesGridReady(params: GridReadyEvent) {
     params.api.sizeColumnsToFit();
   }
 
-  /** AG Grid ready for users */
   onUsersGridReady(params: GridReadyEvent) {
     params.api.sizeColumnsToFit();
   }
