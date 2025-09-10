@@ -1,167 +1,117 @@
+/* === FONT FACES === */
 @font-face {
     font-family: 'Neometric Bold';
     font-style: normal;
     font-weight: 600;
-    src: local('Neometric'), url('https://fonts.cdnfonts.com/s/18720/Unnamed Bold (Regular).woff') format('woff');
+    src: local('Neometric'),
+        url('https://fonts.cdnfonts.com/s/18720/Unnamed Bold (Regular).woff') format('woff');
 }
 
 @font-face {
     font-family: 'Neometric Medium';
     font-style: normal;
     font-weight: 500;
-    src: local('Neometric'), url('https://fonts.cdnfonts.com/s/18720/Neometric Medium (Regular).woff') format('woff');
-}
-
-@font-face {
-    font-family: 'Nasalization';
-    /* font-style: normal; */
-    /* font-weight: 400; */
-    src: local('Nasalization'), url('https://fonts.cdnfonts.com/s/26353/NASALIZA.woff') format('woff');
+    src: local('Neometric'),
+        url('https://fonts.cdnfonts.com/s/18720/Neometric Medium (Regular).woff') format('woff');
 }
 
 @font-face {
     font-family: 'NasalizationLight';
     font-style: normal;
-    /* font-weight: 400; */
-    src: url('/assets/fonts/Nasalization Rg.otf') format('opentype'),
+    src: url('/assets/fonts/Nasalization Rg.otf') format('opentype');
 }
-
 
 /* === DASHBOARD CONTAINER === */
 .dashboard-container {
-font-family: 'Neometric Regular';
+    font-family: 'Neometric Regular';
     background-color: #f6f6f6;
-
-}
-
-/* === DASHBOARD CONTENT === */
-.dashboard-content {
+    height: 100vh;
     display: flex;
     flex-direction: column;
-    padding: 20px;
-    height: calc(100vh - 150px);
-    overflow-y: scroll;
 }
 
-/* === DASHBOARD CONTENT SECTION === */
-.dashboard-content-section {
-    padding-bottom: 15px;
+/* === DASHBOARD GRID === */
+.dashboard-content {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 8fr 4fr;
+    gap: 16px;
+    padding: 20px;
+    height: calc(100vh - 100px);
+    overflow: hidden;
+}
+
+/* === LEFT SECTION === */
+.left-section {
+    display: flex;
+    flex-direction: column;
+    /* gap: 16px; */
+    overflow: hidden;
 }
 
 .section-header {
     font-family: 'Neometric Bold';
-   
     display: flex;
-    flex-direction: row;
     justify-content: space-between;
 }
 
+.navigation-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nomargin {
+    margin: 0;
+}
+
+.arrow {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+    background-color: white;
+    color: #ED3237;
+    font-size: 11px;
+    font-weight: 900;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.arrow:hover {
+    background-color: #f0f0f0;
+    transform: scale(1.1);
+}
+
 .section-header h2 {
-     opacity: 0.15;
+    opacity: 0.15;
     font-size: 20px;
-    font-family: 'Neometric Bold';
     font-weight: 600;
     color: #333;
 }
 
-/* === CALENDAR SECTION BODY === */
-.calender-section-body {
+.escalated-row {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
     gap: 16px;
+    align-items: center;
 }
 
-.calender-first-section {
-    grid-column: span 3;
-}
-
-.calender-second-section {
-    grid-column: span 6;
-}
-
-.calender-third-section {
-    grid-column: span 3;
-}
-
-/* === status button === */
-
-.dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  display: inline-block;
-  margin-right: 6px; /* small spacing from text */
-}
-.statusbutton {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 4px 8px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  background-color: #f0f0f0;
-}
-
-.statusbutton{
-    background-color: #ffffff;
-    border: none;
-    color: #000000;
-    padding: 5px 10px;
-    font-size: 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-family: 'Neometric Medium';
-}
-
-
-/* === FILTERS === */
-.filters {
-    display: inline-flex;
-    gap: 0.5rem;
-    margin-left: 1rem;
-    height: 25px;
-   
-}
-
-:host ::ng-deep .custom-header {
-  font-family: 'Neometric Medium' !important;
-  font-size: 12px !important;
-}
-
-:host ::ng-deep .custom-cell {
-  font-family: 'Neometric Medium' !important;
-  font-size: 12px !important;
-}
-
-:host ::ng-deep .ag-paging-panel {
-  font-family: 'Neometric Medium' !important;
-  font-size: 12px !important;
-}
-
-.filters button {
-    padding: 4px 10px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    background: #fff;
-    color: #444;
-    cursor: pointer;
-    transition: background 0.2s ease;
-      font-size: 12px;
-     font-family: 'Neometric Medium';
-}
-
-.filters button:hover {
-    background: #f2f2f2;
-}
-
-.filters button.active {
-    background: black;
-    color: #fff;
-    border-color: black;
-}
 
 .calender-escalated-card {
+    grid-column: span 2;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fff;
+    font-family: 'Neometric Medium';
+    font-size: 14px;
     cursor: pointer;
     transition: transform 0.2s;
 }
@@ -170,371 +120,210 @@ font-family: 'Neometric Regular';
     transform: scale(1.02);
 }
 
-.right-popup {
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 550px;
-    height: 100vh;
-    /* Full container height */
-    background: #fff;
-    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.15);
-    display: flex;
-    flex-direction: column;
-    z-index: 999;
-    animation: slideIn 0.3s ease-out;
+.calender-escalated-card .label {
+    font-weight: 600;
+    color: #333;
 }
 
-.right-tablepopup {
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: auto;
-    height: 100vh;
-    /* Full container height */
-    background: #fff;
-    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.15);
-    display: flex;
-    flex-direction: column;
-    z-index: 999;
-    animation: slideIn 0.3s ease-out;
+.calender-escalated-card .value {
+    font-weight: bold;
+    color: inherit;
 }
 
-.label {
-    margin: 0 0 0 15px;
+.hidden-card {
+    display: none;
+}
+
+.blank-space {
+    grid-column: span 2;
+}
+
+.calender-search {
+    grid-column: span 4;
+}
+
+.calender-search input {
+    width: 90%;
+    padding: 8px 12px;
+    border-radius: 25px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+.right-section.add-section .popup-header {
+    padding: 16px;
+    background: #000000;
+    color: #fff;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.right-section.add-section .right-arrow {
+  background-color: transparent;  /* no background */
+  border: none;                   /* remove border */
+  color: white;                   /* white arrow */
+  font-size: 20px;                /* adjust size */
+  cursor: pointer;
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.right-section.add-section .right-arrow:hover {
+  background-color: rgba(0, 0, 0, 0.2); /* subtle hover effect */
+}
+
+/* Form inside ADD section */
+.right-section.add-section .add-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 10px 0;
+}
+
+.right-section.add-section .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.right-section.add-section .form-group label {
+  font-weight: 600;
+  color: #333;
+}
+
+.right-section.add-section .form-control {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.right-section.add-section .form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.right-section.add-section .btn {
+  padding: 6px 12px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.right-section.add-section .cancel-btn {
+  background-color: #ccc;
+  color: #333;
+}
+
+.right-section.add-section .cancel-btn:hover {
+  background-color: #b3b3b3;
+}
+
+.right-section.add-section .add-btn {
+  background-color: #007bff;
+  color: white;
+}
+
+.right-section.add-section .add-btn:hover {
+  background-color: #0069d9;
+}
+
+/* === RIGHT SECTION === */
+.right-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    overflow: auto;
+    height: calc(100vh - 100px);
+}
+
+.right-section .popup-header {
+    padding: 16px;
+    background: #ED3237;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
 }
 
 .popup-header-content {
     display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    width: 60%;
-    flex-direction: row;
-      font-family: 'Neometric Bold';
-          font-size: 14px;
-}
-
-.popup-header {
-    padding: 16px;
-    background: #ED3237;
-    color: #fff;
-
- 
-    border-bottom: 1px solid #ddd;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-/* .icon-info .label{
-        font-family: 'Neometric Regular';
-}
-.popup-header-content .icon{
-      height: 18px;
-} */
-
-.popup-body {
-    padding: 16px;
-    overflow-y: auto;
-    flex: 1;
-}
-
-.close-btn {
-    background: none;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-}
-
-@keyframes slideIn {
-    from {
-        transform: translateX(100%);
-    }
-
-    to {
-        transform: translateX(0);
-    }
-}
-
-
-/* === CALENDAR SECTION === */
-.calendar-section-wrapper {
-    display: flex;
-    justify-content: flex-start;
-    width: 100%;
-}
-
-.calendar-section {
-    display: flex;
     align-items: center;
     gap: 10px;
+    font-family: 'Neometric Bold';
+    font-size: 14px;
 }
 
-.calendar-icon {
-  cursor: pointer;
-  width: 30px;
-  height: 30px;
-  background-color: #ff0000;
-  display: inline-block;
-  border-radius: 50%;
-  margin-right: 6px;
-}
-
-.calendar-controls {
+.statusbutton {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 10px;
-}
-
-.selected-date p {
-    margin: 0;
-    font-weight: bold;
-       font-size: 12px;
-     font-family: 'Neometric Medium';
-}
-
-.arrow {
-    background-color: white;
-    border: 1px solid #ccc;
-    border-radius: 50%;
-    width: 25px;
-    height: 25px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    cursor: pointer;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-}
-
-.arrow:hover {
-    background-color: #f0f0f0;
-    box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.2);
-}
-
-.today-button {
-    background-color: red;
-    color: white;
+    gap: 4px;
+    padding: 4px 8px;
     border: none;
-    padding: 5px 10px;
     border-radius: 5px;
     cursor: pointer;
+    background-color: #ffffff;
+    color: #000000;
     font-size: 12px;
-     font-family: 'Neometric Medium';
-}
-
-/* === CALENDAR ESCALATED SECTION === */
-.escalated-section {
-    display: flex;
-    gap: 16px;
-    padding: 0;
-    width: 100%;
-}
-
-.calender-escalated-card {
-    flex: 1 1 0;
-    min-width: 0;
-    background: #fff;
-    border-radius: 8px;
-    padding: 10px;
-}
-
-.calender-escalated-card-content {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    flex-wrap: nowrap;
-    align-items: center;
-}
-
-.escalated-icon {
-   height: 18px;
-    width: 18px;
-}
-
-.calender-escalated-card h4 {
-    margin: 0px;
-    font-size: 12px;
-    font-weight: 600;
-       font-family: 'NasalizationLight';
-}
-
-.calender-escalated-card p {
- font-size: 14px;
-    margin: 0;
-    font-family: 'NasalizationLight';
-}
-
-/* === SEARCH BAR === */
-.search-wrapper {
-    width: -webkit-fill-available;
-}
-
-.search-input {
-    width: -webkit-fill-available;
-    padding: 8px 12px;
-    border-radius: 25px;
-    border: 1px solid #ccc;
-    font-size: 15px;
-    height: 25px;
-}
-
-/* === CALENDAR POPUP === */
-
-/* Overlay (black with opacity) */
-.calendar-popup-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    /* black with 60% opacity */
-    z-index: 1000;
-}
-
-/* Popup itself */
-.calendar-popup {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    z-index: 1001;
-    /* above overlay */
-    box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.3);
-}
-
-
-.popup-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.close-button {
-    background: none;
-    border: none;
-    font-size: 18px;
-    cursor: pointer;
-}
-
-.popup-content {
-    font-size: 14px;
-}
-
-
-/* === ESCALATED CONTENT SECTION === */
-.escalated-content-section {
-    padding-bottom: 15px;
-}
-
-.escalated-section-body {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    gap: 16px;
-}
-
-.first-section {
-    grid-column: span 9;
-}
-
-.second-section {
-    grid-column: span 3;
-    height: -webkit-fill-available;
-}
-
-.escalated-card {
-    flex: 1 1 0;
-    min-width: 0;
-    background: #fff;
-    border-radius: 8px;
-    padding: 10px;
-}
-
-.escalated-card h4 {
-    margin: 15px 0 0 0;
-    font-size: 12px;
-    font-weight: 600;
     font-family: 'Neometric Medium';
-
 }
 
-.escalated-card p {
-    font-size: 14px;
-    font-weight: bold;
-    margin: 0;
-     font-family: 'NasalizationLight';
-}
-
-/* === EVENT ESCALATED CARD === */
-.event-escalated-card {
-    flex: 1 1 0;
-    min-width: 0;
-    background: #fff;
-    border-radius: 8px;
-    padding: 10px;
-    border: 1px solid red;
-}
-
-.event-escalated-card-content {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    flex-wrap: nowrap;
-    align-items: center;
-    margin-top: 20px;
-    font-size: 12px;
-     font-family: 'Neometric Medium';
-}
-
-.green,
-.orange,
-.red {
-    display: inline-block;
-    width: 10px;
-    height: 10px;
+.dot {
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
+    display: inline-block;
     margin-right: 6px;
 }
 
-.green {
-    background-color: green;
+/* Scrollable popup body */
+.popup-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
 }
 
-.orange {
-    background-color: orange;
+/* Optional: scrollbar style */
+.popup-body::-webkit-scrollbar {
+    width: 6px;
 }
 
-.red {
-    background-color: red;
+.popup-body::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
 }
 
-/* === RESPONSIVE QUERIES === */
-@media (max-width: 900px) {
-    .escalated-section {
-        flex-direction: column;
-        gap: 10px;
+/* === AG GRID CUSTOM FONTS === */
+:host ::ng-deep .custom-header,
+:host ::ng-deep .custom-cell,
+:host ::ng-deep .ag-paging-panel {
+    font-family: 'Neometric Medium' !important;
+    font-size: 12px !important;
+}
+
+/* === UTILITY CLASSES === */
+.m-t-20 {
+    margin-top: 20px;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 1024px) {
+    .dashboard-content {
+        grid-template-columns: 1fr;
     }
-}
 
-@media (max-width: 600px) {
-    .calendar-section {
-        gap: 5px;
-        margin-top: 10px;
-        flex-wrap: wrap;
-    }
-}
-
-@media (max-width: 400px) {
-    .calendar-section {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 3px;
+    .right-section {
+        height: auto;
     }
 }

@@ -912,27 +912,27 @@ export class EventsComponent implements OnInit {
       next: (res) => {
         if (res && res.counts) {
           this.secondEscalatedDetails = [
-            { label: "Total", value: res.counts.total || 0, color: "#ED3237" },
+            { label: "Total", value: res.counts.totalEventsCount || 0, color: "#ED3237" },
             {
               iconPath: "assets/home.svg",
-              value: res.counts.siteEvents || 0,
+              value: res.counts.sites || 0,
               color: "#ED3237",
             },
             {
               iconPath: "assets/cam.svg",
-              value: res.counts.cameraEvents || 0,
+              value: res.counts.cameras || 0,
               color: "#ED3237",
             },
 
             // 👇 separate cards for dots
             {
               iconcolor: "#FFC400",
-              value: res.false?.eventWall || 0,
+              value: res.counts.EventWall || 0,
               color: "#ED3237",
             },
             {
               iconcolor: "#53BF8B",
-              value: res.false?.manualWall || 0,
+              value: res.counts.ManualWall || 0,
               color: "#ED3237",
             },
           ];

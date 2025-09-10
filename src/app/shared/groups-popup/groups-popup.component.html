@@ -1,56 +1,67 @@
-<div class="popup-container">
-  <div class="m-b-30">
-   
-  <div class="report-header">
-    <h2>Site Info</h2>
+<div  class="popup-container">
+<div class="filter-item">
+ <div class="status-wrapper">
+    <h3 class="filters-title">STATUS</h3>
+    <label class="switch">
+      <input type="checkbox" [checked]="data.status === 'ACTIVE'" disabled />
+      <span class="slider round"></span>
+    </label>
   </div>
 
-<ag-grid-angular
-  class="ag-theme-alpine report-grid"
-   theme="legacy"
-  [rowData]="rowData"
-  [columnDefs]="columnDefs"
-  [defaultColDef]="defaultColDef"
-  [pagination]="true"
-  [paginationPageSize]="5"
-  [groupDisplayType]="'multipleColumns'"
-  (gridReady)="onGridReady($event)"
-  style="width: 100%; height: 250px"
->
-</ag-grid-angular>
+  <!-- + Button -->
+  <button class="plus-btn" (click)="openPopup(data)">+</button>
+
+  <!-- Popup -->
+ <div class="popup-menu" *ngIf="showPopup">
+  <button class="popup-item" (click)="openSection('site')">
+    <img src="assets/home.svg" alt="Dashboard" class="nav-icon" /> Site
+  </button>
+  <button class="popup-item" (click)="openSection('camera')">
+    <img src="assets/cam.svg" alt="Dashboard" class="nav-icon" /> Camera
+  </button>
+  <button class="popup-item" (click)="openSection('employee')">
+    <img src="assets/moniter.svg" alt="Dashboard" class="nav-icon" /> Employee
+  </button>
 </div>
-  <div class="m-b-30">
-  <div class="report-header">
-    <h2>Camera Info</h2>
-  </div>
+</div>
 
+
+
+  <!-- Sites Table -->
+  <div class="report-header">
+    <h2>Sites Info</h2>
+  </div>
   <ag-grid-angular
     class="ag-theme-alpine report-grid"
-     theme="legacy"
-    [rowData]="rowData"
-    [columnDefs]="columnDefs"
+    theme="legacy"
+    [rowData]="sitesRowData"
+    [columnDefs]="sitesColumnDefs"
     [defaultColDef]="defaultColDef"
     [pagination]="true"
     [paginationPageSize]="5"
-    (gridReady)="onGridReady($event)"
+     domLayout="autoHeight"
+               [paginationPageSizeSelector]="[5, 10, 50, 100]"
     style="width: 100%; height: 250px"
+    (gridReady)="onSitesGridReady($event)"
   >
   </ag-grid-angular>
-</div>
-  <div class="report-header">
+
+  <!-- Users Table -->
+  <div class="report-header" style="margin-top:20px">
     <h2>Employee Info</h2>
   </div>
-
   <ag-grid-angular
     class="ag-theme-alpine report-grid"
-     theme="legacy"
-    [rowData]="rowData"
-    [columnDefs]="columnDefs"
+    theme="legacy"
+    [rowData]="usersRowData"
+    [columnDefs]="usersColumnDefs"
     [defaultColDef]="defaultColDef"
     [pagination]="true"
     [paginationPageSize]="5"
-    (gridReady)="onGridReady($event)"
+     domLayout="autoHeight"
+            [paginationPageSizeSelector]="[5, 10, 50, 100]"
     style="width: 100%; height: 250px"
+    (gridReady)="onUsersGridReady($event)"
   >
   </ag-grid-angular>
 </div>

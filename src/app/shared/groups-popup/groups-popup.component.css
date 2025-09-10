@@ -35,8 +35,7 @@
   margin: auto;
   background: #fff;
   border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  
 }
 
 h2 {
@@ -44,6 +43,158 @@ h2 {
   margin: 0 0 10px;
    font-family: 'Neometric Bold';
 
+}
+.nav-icon{
+    width: 12px;
+    height: 12px;
+    margin-right: 10px;
+     color: black;
+      font-size: 12px;
+    font-family: 'Neometric Medium';
+}
+
+.filters-title {
+    margin: 0;
+    font-weight: bold;
+    font-size: 12px;
+    font-family: 'Neometric Medium';
+
+}
+
+.filter-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative; /* so popup can be positioned */
+}
+
+.plus-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: white;
+  border: 1px solid #ccc;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.plus-btn:hover {
+  background-color: #f0f0f0;
+}
+
+.popup-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 6px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+ box-shadow: -5px 4px 9px 3px rgba(0, 0, 0, 0.15);
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 1000;
+}
+
+.popup-item {
+ background: none;
+    border: none;
+    color: black;
+    display: flex;
+    padding: 6px 6px 6px 6px;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 4px;
+    align-items: center;
+     font-size: 12px;
+    font-family: 'Neometric Medium';
+}
+
+.popup-item:hover {
+  background-color: #f5f5f5;
+}
+
+.status-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.filters {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.filter {
+    display: flex;
+    gap: 50px;
+    align-items: center;
+}
+
+.filter-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Toggle switch CSS */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: white;
+    transition: 0.3s;
+    border: 0.5px solid black;
+    border-radius: 24px;
+    height: 20px;
+}
+
+input:checked+.slider {
+    /* background-color: #4caf50; */
+     background-color: white;
+    
+
+}
+
+input:checked+.slider:before {
+    transform: translateX(18px);
+        background-color: #ED3237;
+}
+
+
+.slider:before {
+    position: absolute;
+    content: "";
+  height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    background-color: #ccc;
+    transition: 0.3s;
+    border-radius: 50%;
 }
 
 .section {
