@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class EventsService {
-  private apiUrl = 'http://usstaging.ivisecurity.com:8234/getEventReportFullData_1_0?actionTag=Suspicious';
+  private apiUrl = 'https://usstaging.ivisecurity.com/events_data/getEventReportFullData_1_0';
 
   constructor(private http: HttpClient) {}
 

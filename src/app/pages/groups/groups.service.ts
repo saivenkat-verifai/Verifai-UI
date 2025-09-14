@@ -6,8 +6,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class GroupsService {
-  private apiGroups = 'http://usstaging.ivisecurity.com:8234/getGroupDetails';
-  private apiSitesAndUsers = 'http://usstaging.ivisecurity.com:8234/getGroupSitesAndGroupUsers_1_0';
+  private apiGroups = 'https://usstaging.ivisecurity.com/events_data/getGroupDetails';
+  private apiSitesAndUsers = 'https://usstaging.ivisecurity.com/events_data/getGroupSitesAndGroupUsers_1_0';
 
   constructor(private http: HttpClient) {}
 
@@ -19,5 +19,6 @@ export class GroupsService {
   // Second API: Get sites and users for a group
   getGroupSitesAndUsers(groupId: number): Observable<any> {
     return this.http.get<any>(`${this.apiSitesAndUsers}?groupId=${groupId}`);
+    console.log("Group ID:", groupId); // Debugging line to check groupId value
   }
 }

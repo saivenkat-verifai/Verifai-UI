@@ -42,32 +42,33 @@ export class GroupsPopupComponent implements OnChanges {
 
   showPopup = false;
 
-autoGroupColumnDef: ColDef = {
-  headerName: 'SITE ID',
-  field: 'siteId',
-  cellRendererParams: {
-    suppressCount: true, // removes child count (optional)
-  },
-  valueGetter: (params) => {
-    return params.data && !params.data.isCamera ? params.data.siteId : '';
-  }
-};
+  autoGroupColumnDef: ColDef = {
+    headerName: "SITE ID",
+    field: "siteId",
+    cellRendererParams: {
+      suppressCount: true,
+    },
+    valueGetter: (params) => {
+      return params.data && !params.data.isCamera ? params.data.siteId : "";
+    },
+  };
 
   /** Columns for Sites AG Grid */
   sitesColumnDefs: ColDef[] = [
-  {
-    headerName: "SITE / CAMERA NAME",
-    field: "siteName",
-    cellClass: "custom-cell",
-    valueGetter: (params) =>
-      params.data.isCamera ? params.data.cameraName : params.data.siteName,
-  },
-  {
-    headerName: "CAMERAS",
-    field: "totalCamerasCount",
-    cellClass: "custom-cell",
-    valueGetter: (params) => (params.data.isCamera ? "" : params.data.totalCamerasCount),
-  },
+    {
+      headerName: "SITE / CAMERA NAME",
+      field: "siteName",
+      cellClass: "custom-cell",
+      valueGetter: (params) =>
+        params.data.isCamera ? params.data.cameraName : params.data.siteName,
+    },
+    {
+      headerName: "CAMERAS",
+      field: "totalCamerasCount",
+      cellClass: "custom-cell",
+      valueGetter: (params) =>
+        params.data.isCamera ? "" : params.data.totalCamerasCount,
+    },
   ];
 
   /** Columns for Users AG Grid */
@@ -118,21 +119,23 @@ autoGroupColumnDef: ColDef = {
 
       if (Array.isArray(this.data.groupSites)) {
         this.data.groupSites.forEach((site: any) => {
+          const safeSiteId = site.siteId ?? `site-${Math.random()}`;
+
           // Add parent row
           this.sitesRowData.push({
-            siteId: site.siteId,
-            siteName: site.siteName,
-            status: site.status,
-            totalCamerasCount: site.totalCamerasCount,
+            siteId: safeSiteId,
+            siteName: site.siteName || "Unnamed Site",
+            status: site.status || "UNKNOWN",
+            totalCamerasCount: site.totalCamerasCount || 0,
             isCamera: false, // parent
           });
 
           // Add child camera rows
           const cameras = Array.from(
-            { length: site.totalCamerasCount },
+            { length: site.totalCamerasCount || 0 },
             (_, i) => ({
-              siteId: site.siteId,
-              cameraName: `mdx-cam${i + 1}`,
+              siteId: safeSiteId,
+              cameraName: site.cameras?.[i]?.cameraName || `mdx-cam${i + 1}`,
               isCamera: true,
             })
           );
@@ -144,10 +147,10 @@ autoGroupColumnDef: ColDef = {
       // Users row data
       if (Array.isArray(this.data.groupUsers)) {
         this.usersRowData = this.data.groupUsers.map((user: any) => ({
-          userId: user.userId,
-          User_Name: user.User_Name,
-          email: user.email,
-          status: user.status,
+          userId: user.userId ?? `user-${Math.random()}`,
+          User_Name: user.User_Name || "Unknown User",
+          email: user.email || "N/A",
+          status: user.status || "UNKNOWN",
         }));
       } else {
         this.usersRowData = [];
@@ -157,10 +160,13 @@ autoGroupColumnDef: ColDef = {
 
   /** AG Grid tree data hierarchy */
   getDataPath = (data: any) => {
+    const siteId =
+      data.siteId != null ? data.siteId.toString() : "unknown-site";
+
     if (data.isCamera) {
-      return [data.siteId.toString(), data.cameraName]; // child path
+      return [siteId, data.cameraName || "unknown-camera"];
     } else {
-      return [data.siteId.toString()]; // parent path
+      return [siteId];
     }
   };
 

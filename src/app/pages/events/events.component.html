@@ -100,6 +100,7 @@
               placeholder="Search here"
               [(ngModel)]="searchTerm"
               class="search-input"
+              (input)="onFilterTextBoxChanged()"
             />
           </div>
         </div>
@@ -333,6 +334,7 @@
             [paginationPageSizeSelector]="[10, 20, 50, 100]"
             [localeText]="localeText"
             domLayout="autoHeight"
+            [quickFilterMatcher]="quickFilterMatcher"
             (gridReady)="onGridReady($event)"
             (cellClicked)="onCellClicked($event)"
           >

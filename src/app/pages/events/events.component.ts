@@ -10,6 +10,9 @@ import { MatDatepickerModule } from "@angular/material/datepicker";
 import { ModuleRegistry, AllCommunityModule } from "ag-grid-community";
 import { EventsService } from "./events.service";
 
+import { QuickFilterModule } from "ag-grid-community";
+// Register module
+ModuleRegistry.registerModules([QuickFilterModule]);
 // ✅ Register all AG Grid community modules (outside @NgModule)
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -95,6 +98,7 @@ export class EventsComponent implements OnInit {
   }
 
   onGridReady(params: GridReadyEvent) {
+    
     this.gridApi = params.api;
 
     const resizeAll = () => {
@@ -123,6 +127,18 @@ export class EventsComponent implements OnInit {
       window.removeEventListener("resize", this.boundResize);
     }
   }
+
+   onFilterTextBoxChanged() {
+    if (this.gridApi) {
+      this.gridApi.setGridOption("quickFilterText", this.searchTerm);
+    }
+  }
+  quickFilterMatcher = (quickFilterParts: string[], rowText: string) => {
+    return quickFilterParts.every((part) => {
+      const regex = new RegExp(part, "i"); // case-insensitive
+      return regex.test(rowText);
+    });
+  };
 
   /** Mapping icon paths to their labels for popup headings */
   iconLabelMap: { [key: string]: string } = {
@@ -907,12 +923,188 @@ export class EventsComponent implements OnInit {
 
   secondEscalatedDetails: SecondEscalatedDetail[] = [];
 
+  formatDateTime(value: string) {
+    if (!value) return "";
+
+    // Convert "2025-08-25_03-44-39" → "2025-08-25T03:44:39"
+    const isoString = value.replace("_", "T").replace(/-/g, (match, offset) => {
+      // Only replace '-' in the time part with ':'
+      return offset > 9 ? ":" : "-";
+    });
+
+    const date = new Date(isoString);
+    return isNaN(date.getTime()) ? value : date.toLocaleString();
+  }
+  /** start row data for electedFilter === 'CLOSED' */
+  rowData: any[] = [];
+
+  /** Auto-size a single column dynamically */
+  // autoSizeColumn(colKey: string) {
+  //   if (this.gridApi && this.gridApi.getColumnDef(colKey)) {
+  //     this.gridColumnApi = this.gridColumnApi || this.gridApi.getColumnDefs(); // fallback
+  //     this.gridApi.getColumnDef(colKey); // ensure column exists
+  //     this.gridApi.sizeColumnsToFit(); // optional: ensure grid fits width
+  //     this.gridApi.getColumnDefs(); // refresh
+  //     if (this.gridColumnApi) {
+  //       this.gridColumnApi.autoSizeColumn(colKey, true); // true = include header
+  //     }
+  //   }
+  // }
+
+  /** Auto-size single column including its data */
+  autoSizeColumn(colKey: string) {
+    if (this.gridApi) {
+      const column = this.gridApi.getColumnDef(colKey);
+      if (column) {
+        // Include header when auto-sizing
+        this.gridApi.autoSizeColumns([colKey], true);
+      }
+    }
+  }
+
+  /** Auto-size multiple columns at once */
+  autoSizeColumns(colKeys: string[]) {
+    if (this.gridApi) {
+      this.gridApi.autoSizeColumns(colKeys, true);
+    }
+  }
+
+  columnDefs: ColDef[] = [
+    {
+      headerName: "ID",
+      field: "siteId",
+      headerClass: "custom-header",
+      cellClass: "custom-cell",
+      floatingFilter: true,
+      filter: true,
+      suppressHeaderMenuButton: true,
+    },
+    {
+      headerName: "SITE",
+      field: "siteName",
+      headerClass: "custom-header",
+      cellClass: "custom-cell",
+      floatingFilter: true,
+      filter: true,
+      suppressHeaderMenuButton: true,
+    },
+    {
+      headerName: "DEVICE",
+      field: "device",
+      headerClass: "custom-header",
+      cellClass: "custom-cell",
+      floatingFilter: true,
+      filter: true,
+      suppressHeaderMenuButton: true,
+    },
+    {
+      headerName: "CAMERA",
+      field: "cameraId",
+      headerClass: "custom-header",
+      cellClass: "custom-cell",
+      floatingFilter: true,
+      filter: true,
+      suppressHeaderMenuButton: true,
+    },
+    // {
+    //   headerName: "CITY",
+    //   field: "city",
+    //   headerClass: "custom-header",
+    //   cellClass: "custom-cell",
+    // },
+    {
+      headerName: "EVENT TIME",
+      field: "eventStartTime",
+      headerClass: "custom-header",
+      cellClass: "custom-cell",
+      valueFormatter: (params) => this.formatDateTime(params.value),
+      floatingFilter: true,
+      filter: true,
+      suppressHeaderMenuButton: true,
+    },
+    {
+      headerName: "DURATION",
+      field: "duration",
+      headerClass: "custom-header",
+      cellClass: "custom-cell",
+      floatingFilter: true,
+      filter: true,
+      suppressHeaderMenuButton: true,
+    },
+    {
+      headerName: "TZ",
+      field: "tz",
+      headerClass: "custom-header",
+      cellClass: "custom-cell",
+      floatingFilter: true,
+      filter: true,
+      suppressHeaderMenuButton: true,
+    },
+    {
+      headerName: "ACTION TAG",
+      field: "actionTag",
+      headerClass: "custom-header",
+      cellClass: "custom-cell",
+      floatingFilter: true,
+      filter: true,
+      suppressHeaderMenuButton: true,
+    },
+    {
+      headerName: "EMP.",
+      field: "employee",
+      headerClass: "custom-header",
+      cellClass: "custom-cell",
+      valueFormatter: (params) => params.value?.name || "", // <-- string value for filters/sort
+      cellRenderer: (params: any) => {
+        const emp = params.value;
+        return `
+      <div style="display:flex; align-items:center; gap:8px;">
+        <img src="${emp.avatar}" style="width:30px; height:30px; border-radius:50%;" alt="Emp"/>
+        <span>${emp.name} - Level ${emp.level}</span>
+      </div>
+    `;
+      },
+      floatingFilter: true,
+      filter: true,
+      suppressHeaderMenuButton: true,
+    },
+
+    {
+      headerName: "ALERT TYPE",
+      field: "alertType",
+      headerClass: "custom-header",
+      cellClass: "custom-cell",
+      cellRenderer: () =>
+        `<span style="display:inline-block; width:14px; height:14px; background:green; border-radius:50%;"></span>`,
+      floatingFilter: true,
+      filter: true,
+      suppressHeaderMenuButton: true,
+    },
+    {
+      headerName: "MORE",
+      field: "more",
+      headerClass: "custom-header",
+      cellClass: "custom-cell",
+      cellRenderer: () => `
+        <span class="play-icon style="margin-right:8px;">
+          <img src="assets/play-circle-icon.svg" style="width:20px; height:20px; cursor:pointer;" alt="Play"/>
+        </span>
+        <span class="info-icon">
+          <img src="assets/information-icon.svg" style="width:20px; height:20px; cursor:pointer;" alt="Info"/>
+        </span>
+      `,
+    },
+  ];
   loadsecondEscalatedDetails() {
     this.eventsService.getSuspiciousEvents().subscribe({
       next: (res) => {
         if (res && res.counts) {
           this.secondEscalatedDetails = [
-            { label: "Total", value: res.counts.totalEventsCount || 0, color: "#ED3237" },
+            {
+              label: "Total",
+              value: res.counts.totalEventsCount || 0,
+              color: "#ED3237",
+            },
             {
               iconPath: "assets/home.svg",
               value: res.counts.sites || 0,
@@ -952,12 +1144,13 @@ export class EventsComponent implements OnInit {
           this.rowData = res.eventData.map((e: any) => ({
             siteId: e.siteId,
             siteName: e.siteName,
-            device: e.cameraId,
-            city: e.city,
+            device: e.unitId,
+            cameraId: e.cameraId.slice(-2),
+            // city: e.city,
             // duration: `${Math.floor(e.eventDuration / 3600)}h ${Math.floor((e.eventDuration % 3600) / 60)}m ${e.eventDuration % 60}s`,
-            duration: `${Math.floor(e.eventDuration / 3600)}h ${Math.floor(
-              (e.eventDuration % 3600) / 60
-            )}m`,
+            duration: `${Math.floor(e.eventDuration / 60)}m ${
+              e.eventDuration % 60
+            }s`,
             tz: "CT",
             eventStartTime: e.eventStartTime,
             actionTag: e.actionTag,
@@ -970,6 +1163,17 @@ export class EventsComponent implements OnInit {
             alertType: "green",
             more: true,
           }));
+          // ✅ Auto-size columns based on data + header
+          setTimeout(() => {
+            this.autoSizeColumns([
+              "siteId",
+              "siteName",
+              "device",
+              "cameraId",
+              "duration",
+              "actionTag",
+            ]);
+          });
         }
       },
       error: (err) => {
@@ -978,123 +1182,6 @@ export class EventsComponent implements OnInit {
       },
     });
   }
-
-  formatDateTime(value: string) {
-    if (!value) return "";
-
-    // Convert "2025-08-25_03-44-39" → "2025-08-25T03:44:39"
-    const isoString = value.replace("_", "T").replace(/-/g, (match, offset) => {
-      // Only replace '-' in the time part with ':'
-      return offset > 9 ? ":" : "-";
-    });
-
-    const date = new Date(isoString);
-    return isNaN(date.getTime()) ? value : date.toLocaleString();
-  }
-  /** start row data for electedFilter === 'CLOSED' */
-  rowData: any[] = [];
-
-  columnDefs: ColDef[] = [
-    {
-      headerName: "ID",
-      field: "siteId",
-      floatingFilter: true,
-      filter: true,
-      suppressHeaderMenuButton: true,
-      headerClass: "custom-header",
-      cellClass: "custom-cell",
-    },
-    {
-      headerName: "SITE",
-      field: "siteName",
-      floatingFilter: true,
-      filter: true,
-      headerClass: "custom-header",
-      cellClass: "custom-cell",
-    },
-    {
-      headerName: "DEVICE",
-      field: "device",
-      headerClass: "custom-header",
-      cellClass: "custom-cell",
-    },
-    {
-      headerName: "CAMERA",
-      field: "cameraId",
-      headerClass: "custom-header",
-      cellClass: "custom-cell",
-    },
-    {
-      headerName: "CITY",
-      field: "city",
-      headerClass: "custom-header",
-      cellClass: "custom-cell",
-    },
-    {
-      headerName: "EVENT TIME",
-      field: "eventStartTime",
-      headerClass: "custom-header",
-      cellClass: "custom-cell",
-      valueFormatter: (params) => this.formatDateTime(params.value),
-    },
-    {
-      headerName: "DURATION",
-      field: "duration",
-      headerClass: "custom-header",
-      cellClass: "custom-cell",
-    },
-    {
-      headerName: "TZ",
-      field: "tz",
-      headerClass: "custom-header",
-      cellClass: "custom-cell",
-    },
-    {
-      headerName: "ACTION TAG",
-      field: "actionTag",
-      headerClass: "custom-header",
-      cellClass: "custom-cell",
-    },
-    {
-      headerName: "EMP.",
-      field: "employee",
-      headerClass: "custom-header",
-      cellClass: "custom-cell",
-      valueFormatter: (params) => params.value?.name || "", // <-- string value for filters/sort
-      cellRenderer: (params: any) => {
-        const emp = params.value;
-        return `
-      <div style="display:flex; align-items:center; gap:8px;">
-        <img src="${emp.avatar}" style="width:30px; height:30px; border-radius:50%;" alt="Emp"/>
-        <span>${emp.name} - Level ${emp.level}</span>
-      </div>
-    `;
-      },
-    },
-
-    {
-      headerName: "ALERT TYPE",
-      field: "alertType",
-      headerClass: "custom-header",
-      cellClass: "custom-cell",
-      cellRenderer: () =>
-        `<span style="display:inline-block; width:14px; height:14px; background:green; border-radius:50%;"></span>`,
-    },
-    {
-      headerName: "MORE",
-      field: "more",
-      headerClass: "custom-header",
-      cellClass: "custom-cell",
-      cellRenderer: () => `
-        <span class="play-icon style="margin-right:8px;">
-          <img src="assets/play-circle-icon.svg" style="width:20px; height:20px; cursor:pointer;" alt="Play"/>
-        </span>
-        <span class="info-icon">
-          <img src="assets/information-icon.svg" style="width:20px; height:20px; cursor:pointer;" alt="Info"/>
-        </span>
-      `,
-    },
-  ];
 
   /** end row data for electedFilter === 'CLOSED' */
 

@@ -272,11 +272,13 @@ input:checked+.slider:before {
 :host ::ng-deep .custom-cell {
     font-family: 'Neometric Medium' !important;
     font-size: 12px !important;
+    /* width: auto !important; */
 }
 
 :host ::ng-deep .ag-paging-panel {
     font-family: 'Neometric Medium' !important;
     font-size: 12px !important;
+     /* width: auto !important; */
 }
 
 .filters button {

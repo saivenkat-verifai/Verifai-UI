@@ -113,8 +113,22 @@ export class DashboardComponent implements OnInit {
           { iconPath: "assets/cam.svg", count: data.false.cameraCount },
         ],
       },
+       {
+        title: "Suspicious",
+        value: data.suspicious.total,
+        percentage: data.suspicious.suspiciousPercentage,
+        color: "white",
+        colordot: [
+          { iconcolor: "#FFC400", count: data.suspicious.eventWall },
+          { iconcolor: "#53BF8B", count: data.suspicious.manualWall },
+        ],
+        icons: [
+          { iconPath: "assets/home.svg", count: data.suspicious.sitesCount },
+          { iconPath: "assets/cam.svg", count: data.suspicious.cameraCount },
+        ],
+      },
       {
-        title: "Escalated",
+        title: "escalated",
         value: data.escalated.total,
         percentage: data.escalated.escalatedPercentage,
         color: "white",
