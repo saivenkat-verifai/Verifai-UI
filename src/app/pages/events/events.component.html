@@ -21,39 +21,11 @@
 
       <div class="calender-section-body">
         <!-- Add calendar section below the dashboard header -->
-        <div class="calendar-section-wrapper calender-first-section">
-          <div class="calendar-section">
-            <div class="filter-item">
-              <select class="period-dropdown">
-                <option value="day">Day</option>
-                <option value="week">Week</option>
-                <option value="month">Month</option>
-                <option value="custom">Custom</option>
-              </select>
-            </div>
-            <button class="today-button" (click)="setToday()">TODAY</button>
-
-            <div class="calendar-controls">
-              <button class="arrow left-arrow" (click)="changeDate(-1)">
-                ←
-              </button>
-
-              <div *ngIf="selectedDate" class="selected-date">
-                <p>
-                  {{ selectedDate | date : "dd MMMM, yyyy" }} -
-                  {{ selectedDate | date : "dd MMMM, yyyy" }}
-                </p>
-              </div>
-
-              <button class="arrow right-arrow" (click)="changeDate(1)">
-                →
-              </button>
-            </div>
-            <button class="calendar-icon" (click)="openCalendarPopup()">
-              <img src="assets/calender.svg" alt="Dashboard" class="nav-icon" />
-            </button>
-          </div>
-        </div>
+       
+          <div class="calendar-section-wrapper calender-first-section">
+        <app-calendar
+        ></app-calendar>
+      </div>
         <!-- Toggle Switches -->
         <div class="escalated-section calender-second-section">
           <div class="filter" *ngIf="selectedFilter === 'CLOSED'">
@@ -282,6 +254,63 @@
           <!-- Expandable section -->
         </div>
       </div>
+      <!-- <div class="m-t-20" *ngIf="showMore">
+        <div class="escalated-content-section">
+          <div class="escalated-section-body">
+            <div class="escalated-section first-section">
+              <div class="escalated-card" *ngFor="let e of escalatedDetails">
+                <div class="escalated-card-content">
+                  <p [ngStyle]="{ color: e.color }">{{ e.value }}</p>
+                  <h4>{{ e.label }}</h4>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> -->
+
+      <div class="m-t-20" *ngIf="showMore">
+        <div class="escalated-content-section">
+          <div class="escalated-section-body">
+            <div class="escalated-section first-section">
+              <div class="escalated-card" *ngFor="let e of escalatedDetails">
+                <div class="escalated-card-content">
+                  <h4 class="labelmargin">{{ e.label }}</h4>
+                  <p [ngStyle]="{ color: e.color }">{{ e.value }}</p>
+                </div>
+
+                <div class="icons">
+                  <!-- Dots -->
+                  <div class="dots-column" *ngIf="e.colordot">
+                    <div class="icon-section" *ngFor="let dot of e.colordot">
+                      <span
+                        class="dot"
+                        [ngStyle]="{ 'background-color': dot.iconcolor }"
+                      ></span>
+                      <span>{{ dot.count }}</span>
+                    </div>
+                  </div>
+
+                  <!-- Icons -->
+                  <div class="icons-group" *ngIf="e.icons">
+                    <div class="icon-section" *ngFor="let icon of e.icons">
+                      <img
+                        [src]="icon.iconPath"
+                        alt="icon"
+                        class="icon-image"
+                        [ngClass]="{
+                          'cam-icon': icon.iconPath.includes('cam.svg')
+                        }"
+                      />
+                      <span>{{ icon.count }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <!-- PENDING View -->
 
@@ -297,25 +326,12 @@
             [pagination]="true"
             [paginationPageSize]="10"
             domLayout="autoHeight"
+            [quickFilterMatcher]="pendingQuickFilterMatcher"
             [paginationPageSizeSelector]="[10, 20, 50, 100]"
             (gridReady)="onGridReady($event)"
             (cellClicked)="onCellClicked($event)"
           >
           </ag-grid-angular>
-        </div>
-      </div>
-      <div class="m-t-20" *ngIf="showMore">
-        <div class="escalated-content-section">
-          <div class="escalated-section-body">
-            <div class="escalated-section first-section">
-              <div class="escalated-card" *ngFor="let e of escalatedDetails">
-                <div class="escalated-card-content">
-                  <p [ngStyle]="{ color: e.color }">{{ e.value }}</p>
-                  <h4>{{ e.label }}</h4>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -334,7 +350,7 @@
             [paginationPageSizeSelector]="[10, 20, 50, 100]"
             [localeText]="localeText"
             domLayout="autoHeight"
-            [quickFilterMatcher]="quickFilterMatcher"
+            [quickFilterMatcher]="closedQuickFilterMatcher"
             (gridReady)="onGridReady($event)"
             (cellClicked)="onCellClicked($event)"
           >

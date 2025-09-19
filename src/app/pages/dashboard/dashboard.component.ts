@@ -1,230 +1,39 @@
 import { Component, OnInit } from "@angular/core";
-import { ESCALATED_COLORS } from "src/app/shared/constants/chart-colors";
-import { CommonModule, DatePipe, UpperCasePipe } from "@angular/common";
+import { CommonModule, UpperCasePipe } from "@angular/common";
 import { MatNativeDateModule } from "@angular/material/core";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { ColumnChartComponent } from "../../shared/column-chart/column-chart.component";
-import { LineChartComponent } from "../../shared/line-chart/line-chart.component";
-import { HttpClient, HttpClientModule } from "@angular/common/http";
+import { HttpClientModule } from "@angular/common/http";
 import { DashboardService } from "./dashboard.service";
+import { LineChartComponent } from "src/app/shared/line-chart/line-chart.component";
+import { CalendarComponent } from "src/app/shared/calendar/calendar.component";
+import { ESCALATED_COLORS } from "src/app/shared/constants/chart-colors";
 
-interface IconData {
-  iconPath: string;
-  count: number;
-}
-
-interface CardIcon {
-  iconPath: string;
-  count: number;
-}
-
-interface CardDot {
-  iconcolor: string;
-  count: number;
-}
-
-interface DashboardCard {
-  title: string;
-  value: number;
-  percentage?: number; // optional for circle chart
-  color: string; // 'red' or 'white'
-  labelColor?: string; // for label text color if needed
-  icons: CardIcon[];
-  colordot: CardDot[];
-}
-
-interface EscalatedDetail {
-  label: string;
-  value: number;
-  icons: IconData[];
-  colordot?: CardDot[];
-  color: string;
-}
+interface CardDot { iconcolor: string; count: number; }
+interface DashboardCard { title: string; value: number; percentage?: number; color: string; icons: { iconPath: string; count: number }[]; colordot: CardDot[]; }
 
 @Component({
   selector: "app-dashboard",
   templateUrl: "./dashboard.component.html",
   styleUrls: ["./dashboard.component.css"],
   standalone: true,
-  imports: [
-    CommonModule,
-    DatePipe,
-    UpperCasePipe,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    ColumnChartComponent,
-    // LineChartComponent,
-    HttpClientModule,
-  ],
+  imports: [CommonModule, UpperCasePipe, MatDatepickerModule, MatNativeDateModule, ColumnChartComponent, HttpClientModule, LineChartComponent, CalendarComponent],
 })
 export class DashboardComponent implements OnInit {
-  currentDate: Date = new Date();
-  selectedFilter: string = "DAY";
-  isCalendarPopupOpen = false;
-  selectedDate: Date | null = null;
+  currentDate = new Date();
+  isLoading = false;
 
   dashboardCards: DashboardCard[] = [];
-  escalatedDetails: EscalatedDetail[] = [];
+  escalatedDetails: any[] = [];
   escalatedGraph: any[] = [];
   compareGraph: any[] = [];
+  hourlyBreakdownData: any[] = [];
 
   constructor(private dashboardService: DashboardService) {}
 
   ngOnInit() {
-    this.selectedDate = new Date();
-    this.loadDashboardData();
-  }
-
-  loadDashboardData() {
-    this.dashboardService.getEventCounts().subscribe((response) => {
-      this.mapDashboardCards(response);
-      this.mapEscalatedDetails(response.escalated.details);
-      this.mapGraphs(response.escalated.details);
-    });
-  }
-
-  
-  mapDashboardCards(data: any) {
-    this.dashboardCards = [
-      {
-        title: "Total Events",
-        value: data.totalEvents.total,
-        color: "red",
-        colordot: [
-          { iconcolor: "#FFC400", count: data.totalEvents.eventWall },
-          { iconcolor: "#53BF8B", count: data.totalEvents.manualWall },
-        ],
-        icons: [
-          { iconPath: "assets/home.svg", count: data.totalEvents.sitesCount },
-          { iconPath: "assets/cam.svg", count: data.totalEvents.cameraCount },
-        ],
-      },
-      {
-        title: "False",
-        value: data.false.total,
-        percentage: data.false.falsePercentage,
-        color: "white",
-        colordot: [
-          { iconcolor: "#FFC400", count: data.false.eventWall },
-          { iconcolor: "#53BF8B", count: data.false.manualWall },
-        ],
-        icons: [
-          { iconPath: "assets/home.svg", count: data.false.sitesCount },
-          { iconPath: "assets/cam.svg", count: data.false.cameraCount },
-        ],
-      },
-       {
-        title: "Suspicious",
-        value: data.suspicious.total,
-        percentage: data.suspicious.suspiciousPercentage,
-        color: "white",
-        colordot: [
-          { iconcolor: "#FFC400", count: data.suspicious.eventWall },
-          { iconcolor: "#53BF8B", count: data.suspicious.manualWall },
-        ],
-        icons: [
-          { iconPath: "assets/home.svg", count: data.suspicious.sitesCount },
-          { iconPath: "assets/cam.svg", count: data.suspicious.cameraCount },
-        ],
-      },
-      {
-        title: "escalated",
-        value: data.escalated.total,
-        percentage: data.escalated.escalatedPercentage,
-        color: "white",
-        colordot: [
-          {
-            iconcolor: "#FFC400",
-            count: Object.values(data.escalated.details).reduce(
-              (sum: number, d: any) => sum + d.eventWall,
-              0
-            ),
-          },
-          {
-            iconcolor: "#53BF8B",
-            count: Object.values(data.escalated.details).reduce(
-              (sum: number, d: any) => sum + d.manualWall,
-              0
-            ),
-          },
-        ],
-        icons: [
-          {
-            iconPath: "assets/home.svg",
-            count: Object.values(data.escalated.details).reduce(
-              (sum: number, d: any) => sum + d.sitesCount,
-              0
-            ),
-          },
-          {
-            iconPath: "assets/cam.svg",
-            count: Object.values(data.escalated.details).reduce(
-              (sum: number, d: any) => sum + d.cameraCount,
-              0
-            ),
-          },
-        ],
-      },
-      {
-        title: "Pending",
-        value: data.pending,
-        percentage: data.pendingPercentage,
-        color: "white",
-        colordot: [
-          { iconcolor: "#FFC400", count: data.eventWall },
-          { iconcolor: "#53BF8B", count: data.manualWall },
-        ],
-        icons: [
-          { iconPath: "assets/home.svg", count: data.sitesCount },
-          { iconPath: "assets/cam.svg", count: data.camerasCount },
-        ],
-      },
-      {
-        title: "Missed Wall",
-        value: data.missedWall.total,
-        percentage: data.missedWall.missedWallPercentage,
-        color: "white",
-        colordot: [
-          { iconcolor: "#FFC400", count: data.missedWall.eventWall },
-          { iconcolor: "#53BF8B", count: data.missedWall.manualWall },
-        ],
-        icons: [
-          { iconPath: "assets/home.svg", count: data.missedWall.sitesCount },
-          { iconPath: "assets/cam.svg", count: data.missedWall.cameraCount },
-        ],
-      },
-    ];
-  }
-
-  mapEscalatedDetails(details: any) {
-    this.escalatedDetails = Object.keys(details).map((key, index) => ({
-      label: key.charAt(0).toUpperCase() + key.slice(1),
-      value: details[key].total,
-      color: ESCALATED_COLORS[index] || "#000",
-      colordot: [
-        { iconcolor: "#FFC400", count: details[key].eventWall },
-        { iconcolor: "#53BF8B", count: details[key].manualWall },
-      ],
-      icons: [
-        { iconPath: "assets/home.svg", count: details[key].sitesCount },
-        { iconPath: "assets/cam.svg", count: details[key].cameraCount },
-      ],
-    }));
-  }
-
-  mapGraphs(details: any) {
-    this.escalatedGraph = Object.keys(details).map((key) => ({
-      label: key.charAt(0).toUpperCase() + key.slice(1),
-      value: details[key].total,
-      height: details[key].total, // optional: scale later for UI
-    }));
-
-    // Example compareGraph (you can adjust previous values if needed)
-    this.compareGraph = Object.keys(details).map((key) => ({
-      label: key.charAt(0).toUpperCase() + key.slice(1),
-      current: details[key].total,
-      previous: Math.floor(details[key].total * 0.8), // dummy previous value
-    }));
+    const now = new Date();
+    this.onDateRangeSelected({ startDate: now, startTime: "00:00", endDate: now, endTime: "23:59" });
   }
 
   getCircleGradient(percent: number): string {
@@ -232,37 +41,83 @@ export class DashboardComponent implements OnInit {
     return `conic-gradient(#e53935 ${deg}deg, #fce4ec 0deg)`;
   }
 
-  setFilter(filter: string): void {
-    this.selectedFilter = filter;
+  onDateRangeSelected(event: { startDate: Date; startTime: string; endDate: Date; endTime: string }) {
+    this.isLoading = true;
+
+    this.dashboardService
+      .getEventCountsByRange(event.startDate, event.startTime, event.endDate, event.endTime)
+      .subscribe({
+        next: (data) => {
+          if (!data) return;
+          this.dashboardCards = this.mapCards(data);
+          this.escalatedDetails = this.mapDetails(data.suspicious.details);
+          this.escalatedGraph = this.mapGraph(data.suspicious.details);
+          this.compareGraph = this.mapCompareGraph(data.suspicious.details);
+          this.hourlyBreakdownData = this.mapHourly(data.suspicious.details);
+        },
+        error: (err) => console.error(err),
+        complete: () => (this.isLoading = false),
+      });
   }
 
-  changeDate(offset: number) {
-    if (this.selectedDate) {
-      const updatedDate = new Date(this.selectedDate);
-      updatedDate.setDate(updatedDate.getDate() + offset);
-      this.selectedDate = updatedDate;
-    }
+  private mapCards(data: any): DashboardCard[] {
+    const config = [
+      { key: "totalEvents", title: "Total Events", color: "red" },
+      { key: "false", title: "False", color: "white", perc: "falsePercentage" },
+      { key: "suspicious", title: "Suspicious", color: "white", perc: "suspiciousPercentage" },
+      { key: "pending", title: "Pending", color: "white", perc: "pendingPercentage" },
+      { key: "missedWall", title: "Time-Out", color: "white", perc: "missedWallPercentage" },
+    ];
+    return config.map(c => {
+      const item = data[c.key];
+      return {
+        title: c.title,
+        value: item.total,
+        percentage: c.perc ? item[c.perc] : undefined,
+        color: c.color,
+        colordot: [
+          { iconcolor: "#FFC400", count: item.eventWall },
+          { iconcolor: "#53BF8B", count: item.manualWall },
+        ],
+        icons: [
+          { iconPath: "assets/home.svg", count: item.sitesCount },
+          { iconPath: "assets/cam.svg", count: item.cameraCount },
+        ],
+      };
+    });
   }
 
-  setToday(): void {
-    this.currentDate = new Date();
-    this.selectedDate = this.currentDate;
+  private mapDetails(details: any) {
+    return Object.keys(details).map((k, i) => ({
+      label: k.charAt(0).toUpperCase() + k.slice(1),
+      value: details[k].total,
+      color: ESCALATED_COLORS[i] || "#000",
+      colordot: [
+        { iconcolor: "#FFC400", count: details[k].eventWall },
+        { iconcolor: "#53BF8B", count: details[k].manualWall },
+      ],
+      icons: [
+        { iconPath: "assets/home.svg", count: details[k].sitesCount },
+        { iconPath: "assets/cam.svg", count: details[k].cameraCount },
+      ],
+    }));
   }
 
-  onDateSelected(date: Date) {
-    this.selectedDate = date;
-    this.closeCalendarPopup();
+  private mapGraph(details: any) {
+    return Object.keys(details).map(k => ({ label: k, value: details[k].total, height: details[k].total }));
   }
 
-  openCalendar(): void {
-    this.openCalendarPopup();
+  private mapCompareGraph(details: any) {
+    return Object.keys(details).map(k => ({ label: k, current: details[k].total, previous: Math.floor(details[k].total * 0.8) }));
   }
 
-  openCalendarPopup() {
-    this.isCalendarPopupOpen = true;
-  }
-
-  closeCalendarPopup() {
-    this.isCalendarPopupOpen = false;
+  private mapHourly(details: any) {
+    const series: any[] = [];
+    Object.keys(details).forEach(k => {
+      const d = details[k];
+      series.push({ name: `${k} - Event Wall`, type: "line", data: d.hourlyBreakdown.HourlyEventWall });
+      series.push({ name: `${k} - Manual Wall`, type: "line", data: d.hourlyBreakdown.HourlyManualWall });
+    });
+    return series;
   }
 }

@@ -263,6 +263,42 @@ input:checked+.slider:before {
     height: 25px;
 
 }
+.icons-group {
+  display: flex;
+  gap: 16px;
+}
+
+.icon-section {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.icon-image {
+  width: 12px;
+  height: 12px;
+  object-fit: contain;
+}
+.escalated-card-content{
+display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 0 5px;
+    font-size: 12px;
+    font-family: Neometric Medium;
+}
+
+  .labelmargin{
+ margin: 0px 0 0 0;
+  } 
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
 
 :host ::ng-deep .custom-header {
     font-family: 'Neometric Medium' !important;
@@ -379,7 +415,7 @@ input:checked+.slider:before {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 90px;
+    gap: 70px;
 }
 
 .dot {
@@ -685,16 +721,43 @@ input:checked+.slider:before {
     height: -webkit-fill-available;
 }
 
+.dots-column {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* right row for icons */
+.icons-group {
+  display: flex;
+  gap: 20px;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+}
+
+.icons{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    opacity: 40%;
+    align-items: flex-end;
+}
+
 .escalated-card {
-    flex: 1 1 0;
-    min-width: 0;
-    background: #fff;
-    border-radius: 8px;
-    padding: 10px;
+  flex: 1 1 0;
+  min-width: 0;
+  background: #fff;
+  border-radius: 8px;
+  padding: 10px;
 }
 
 .escalated-card h4 {
-    margin: 15px 0 0 0;
+    margin: 0px 0 0 0;
     font-size: 12px;
     font-weight: 600;
     font-family: 'Neometric Medium';

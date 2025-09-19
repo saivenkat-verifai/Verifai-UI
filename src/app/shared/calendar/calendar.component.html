@@ -1,0 +1,100 @@
+<div class="calendar-header">
+  <!-- Left controls -->
+  <select class="view-select" [(ngModel)]="viewMode">
+    <option value="day">DAY</option>
+    <option value="week">WEEK</option>
+    <option value="month">MONTH</option>
+    <option value="custom">CUSTOM</option>
+  </select>
+
+  <button class="today-btn" (click)="goToday()">TODAY</button>
+
+  <button class="circle-btn black" (click)="prevMonth()">
+    <img src="assets/arrow-circle-left.svg" alt="Dashboard" class="nav-icon" />
+  </button>
+
+  <!-- Selected date/time range -->
+
+ <div class="selected-range">
+  {{ startDate | date: 'yyyy-MM-dd' | uppercase }} {{ startTime }} -
+  {{ endDate | date: 'yyyy-MM-dd' | uppercase }} {{ endTime }}
+</div>
+
+  <button class="circle-btn grey" (click)="nextMonth()">
+    <img src="assets/arrow-circle-right.svg" alt="Dashboard" />
+  </button>
+
+  <button class="circle-btn red" (click)="togglePopup()">
+    <img src="assets/calender.svg" alt="Dashboard" class="nav-icon" />
+  </button>
+</div>
+
+<!-- Popup calendar -->
+<!-- Popup modal -->
+<div class="calendar-popup" *ngIf="showPopup">
+  <div class="popup-container">
+    <!-- Header with checkbox -->
+    <div class="popup-header">
+      <label>
+        <input
+          type="checkbox"
+          [(ngModel)]="daterange"
+          (change)="toggleDateRange()"
+        />
+        Date Range
+      </label>
+      <label>
+        <input
+          type="checkbox"
+          [(ngModel)]="wholeDay"
+          (change)="toggleWholeDay()"
+        />
+        Whole Day
+      </label>
+    </div>
+
+    <!-- Date & Time Inputs -->
+    <div class="date-time-inputs">
+      <div class="input-group">
+        <div class="datelabel">
+          <label class="label">Start Date & Time</label>
+        </div>
+        <div class="combined-input">
+          <img src="assets/calender.svg" class="icon calendar-icon" />
+
+          <!-- Single input with dynamic type -->
+          <input
+            [type]="wholeDay ? 'date' : 'datetime-local'"
+            [(ngModel)]="startValue"
+            class="inputdatetime"
+          />
+        </div>
+      </div>
+
+      <div class="input-group">
+        <div class="datelabel">
+          <label class="label">End Date & Time</label>
+        </div>
+
+        <div class="combined-input">
+          <img src="assets/calender.svg" class="icon calendar-icon" />
+
+          <!-- Single input with dynamic type -->
+          <input
+            [type]="wholeDay ? 'date' : 'datetime-local'"
+            [(ngModel)]="endValue"
+            class="inputdatetime"
+          />
+        </div>
+      </div>
+
+      <div class="input-group">
+        <button class="circle-btn submitdate" (click)="confirmSelection()">
+          &rightarrow;
+        </button>
+      </div>
+
+      <!-- Red arrow button -->
+    </div>
+  </div>
+</div>

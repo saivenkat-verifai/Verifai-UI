@@ -53,7 +53,7 @@ export class ColumnChartComponent implements OnChanges, AfterViewInit {
     if (this.compareData && this.compareData.length > 0) {
       this.chartOptions = {
         chart: { type: "column" },
-        title: { text: `${this.chartMode.toUpperCase()} Compare` },
+        title: { text: 'Suspicious Events', align: 'center' },
         xAxis: { categories: this.compareData.map((d) => d.label) },
         yAxis: { title: { text: "Count" } },
         plotOptions: {
@@ -81,7 +81,7 @@ export class ColumnChartComponent implements OnChanges, AfterViewInit {
     } else {
       this.chartOptions = {
         chart: { type: "column" },
-        title: { text: `${this.chartMode.toUpperCase()} Chart` },
+         title: { text: 'Suspicious Events', align: 'center' },
         xAxis: { categories: this.chartData.map((d) => d.label) },
         yAxis: { title: { text: "Count" } },
         plotOptions: {

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <g id="arrow-circle-left" transform="translate(-4.8 -4.8)">
+    <g id="Group_335" data-name="Group 335" transform="translate(4.8 4.8)">
+      <path id="Path_743" data-name="Path 743" d="M14.8,24.8a10,10,0,1,0-10-10A10,10,0,0,0,14.8,24.8Zm.884-12.866a1.25,1.25,0,1,0-1.768-1.768l-3.75,3.75a1.25,1.25,0,0,0,0,1.767l3.75,3.75a1.25,1.25,0,1,0,1.768-1.768L14.067,16.05H18.55a1.25,1.25,0,0,0,0-2.5H14.067Z" transform="translate(-4.8 -4.8)" fill-rule="evenodd"/>
+    </g>
+  </g>
+</svg>

@@ -10,6 +10,8 @@ import { MatDatepickerModule } from "@angular/material/datepicker";
 import { ModuleRegistry, AllCommunityModule } from "ag-grid-community";
 import { EventsService } from "./events.service";
 
+import { CalendarComponent } from "src/app/shared/calendar/calendar.component";
+
 import { QuickFilterModule } from "ag-grid-community";
 // Register module
 ModuleRegistry.registerModules([QuickFilterModule]);
@@ -38,11 +40,19 @@ interface DashboardCard {
   icons: CardIcon[];
 }
 
+/** Dot card structure for escalated details */
+interface CardDot {
+  iconcolor: string;
+  count: number;
+}
+
 /** Escalated detail data structure */
 interface EscalatedDetail {
   label: string;
   value: number;
   color: string;
+  icons?: IconData[]; // optional for icons inside cards
+  colordot?: CardDot[]; // optional for dot-cards
 }
 
 /** Second escalated detail, can be a label or icon */
@@ -66,6 +76,7 @@ interface SecondEscalatedDetail {
     FormsModule,
     MatNativeDateModule,
     MatDatepickerModule,
+    CalendarComponent
   ],
 })
 export class EventsComponent implements OnInit {
@@ -98,7 +109,6 @@ export class EventsComponent implements OnInit {
   }
 
   onGridReady(params: GridReadyEvent) {
-    
     this.gridApi = params.api;
 
     const resizeAll = () => {
@@ -128,17 +138,30 @@ export class EventsComponent implements OnInit {
     }
   }
 
-   onFilterTextBoxChanged() {
+  onFilterTextBoxChanged() {
     if (this.gridApi) {
       this.gridApi.setGridOption("quickFilterText", this.searchTerm);
     }
   }
-  quickFilterMatcher = (quickFilterParts: string[], rowText: string) => {
-    return quickFilterParts.every((part) => {
-      const regex = new RegExp(part, "i"); // case-insensitive
-      return regex.test(rowText);
-    });
-  };
+
+// Matcher for CLOSED table
+closedQuickFilterMatcher = (quickFilterParts: string[], rowText: string) => {
+  // You can customize rowText if you want only certain columns to be searched
+  return quickFilterParts.every((part) => {
+    const regex = new RegExp(part, 'i'); // case-insensitive
+    return regex.test(rowText);
+  });
+};
+
+// Matcher for PENDING table
+pendingQuickFilterMatcher = (quickFilterParts: string[], rowText: string) => {
+  return quickFilterParts.every((part) => {
+    const regex = new RegExp(part, 'i');
+    return regex.test(rowText);
+  });
+};
+
+  
 
   /** Mapping icon paths to their labels for popup headings */
   iconLabelMap: { [key: string]: string } = {
@@ -154,70 +177,103 @@ export class EventsComponent implements OnInit {
     return this.iconLabelMap[iconPath] || "";
   }
 
-  /** Dashboard card data */
-  dashboardCards: DashboardCard[] = [
-    {
-      title: "Total Events",
-      value: this.totalEvents,
-      color: "red",
-      icons: [
-        { iconPath: "assets/home.svg", count: 300 },
-        { iconPath: "assets/cam.svg", count: 1500 },
-        { iconPath: "assets/direction.svg", count: 300 },
-        { iconPath: "assets/moniter.svg", count: 1500 },
-      ],
-    },
-    {
-      title: "False",
-      value: this.falseEvents,
-      percentage: 88,
-      color: "white",
-      icons: [
-        { iconPath: "assets/home.svg", count: 300 },
-        { iconPath: "assets/cam.svg", count: 1500 },
-        { iconPath: "assets/direction.svg", count: 10 },
-        { iconPath: "assets/moniter.svg", count: 40 },
-      ],
-    },
-    {
-      title: "Escalated",
-      value: this.escalated,
-      percentage: 5,
-      color: "white",
-      icons: [
-        { iconPath: "assets/home.svg", count: 150 },
-        { iconPath: "assets/cam.svg", count: 750 },
-        { iconPath: "assets/direction.svg", count: 8 },
-        { iconPath: "assets/moniter.svg", count: 30 },
-      ],
-    },
-    {
-      title: "Pending",
-      value: this.pending,
-      percentage: 7,
-      color: "white",
-      icons: [
-        { iconPath: "assets/home.svg", count: 150 },
-        { iconPath: "assets/cam.svg", count: 750 },
-        { iconPath: "assets/direction.svg", count: 300 },
-        { iconPath: "assets/moniter.svg", count: 1500 },
-      ],
-    },
-  ];
-
-  /** First escalated details section */
   escalatedDetails: EscalatedDetail[] = [
-    { label: "Missed", value: 1500, color: ESCALATED_COLORS[0] },
-    { label: "Suspicious", value: 200, color: ESCALATED_COLORS[1] },
-    { label: "Deterred", value: 30, color: ESCALATED_COLORS[2] },
-    { label: "Intervention", value: 10, color: ESCALATED_COLORS[3] },
-    { label: "Arrest", value: 6, color: ESCALATED_COLORS[4] },
-    { label: "Information", value: 5, color: ESCALATED_COLORS[5] },
-    { label: "Information", value: 5, color: ESCALATED_COLORS[5] },
+    {
+      label: "False",
+      value: 1500,
+      color: ESCALATED_COLORS[0],
+      icons: [
+        { iconPath: "assets/home.svg", count: 300 },
+        { iconPath: "assets/cam.svg", count: 1500 },
+      ],
+      colordot: [
+        { iconcolor: "#FF0000", count: 12 },
+        { iconcolor: "#00FF00", count: 7 },
+      ],
+    },
+    {
+      label: "Escalated",
+      value: 1500,
+      color: ESCALATED_COLORS[0],
+      icons: [
+        { iconPath: "assets/home.svg", count: 300 },
+        { iconPath: "assets/cam.svg", count: 1500 },
+      ],
+      colordot: [
+        { iconcolor: "#FF0000", count: 12 },
+        { iconcolor: "#00FF00", count: 7 },
+      ],
+    },
+    {
+      label: "Arrest",
+      value: 1500,
+      color: ESCALATED_COLORS[0],
+      icons: [
+        { iconPath: "assets/home.svg", count: 300 },
+        { iconPath: "assets/cam.svg", count: 1500 },
+      ],
+      colordot: [
+        { iconcolor: "#FF0000", count: 12 },
+        { iconcolor: "#00FF00", count: 7 },
+      ],
+    },
+    {
+      label: "Intervention",
+      value: 1500,
+      color: ESCALATED_COLORS[0],
+      icons: [
+        { iconPath: "assets/home.svg", count: 300 },
+        { iconPath: "assets/cam.svg", count: 1500 },
+      ],
+      colordot: [
+        { iconcolor: "#FF0000", count: 12 },
+        { iconcolor: "#00FF00", count: 7 },
+      ],
+    },
+    {
+      label: "Diterred",
+      value: 1500,
+      color: ESCALATED_COLORS[0],
+      icons: [
+        { iconPath: "assets/home.svg", count: 300 },
+        { iconPath: "assets/cam.svg", count: 1500 },
+      ],
+      colordot: [
+        { iconcolor: "#FF0000", count: 12 },
+        { iconcolor: "#00FF00", count: 7 },
+      ],
+    },
+    {
+      label: "Missed Event",
+      value: 1500,
+      color: ESCALATED_COLORS[0],
+      icons: [
+        { iconPath: "assets/home.svg", count: 300 },
+        { iconPath: "assets/cam.svg", count: 1500 },
+      ],
+      colordot: [
+        { iconcolor: "#FF0000", count: 12 },
+        { iconcolor: "#00FF00", count: 7 },
+      ],
+    },
+    {
+      label: "Information",
+      value: 1500,
+      color: ESCALATED_COLORS[0],
+      icons: [
+        { iconPath: "assets/home.svg", count: 300 },
+        { iconPath: "assets/cam.svg", count: 1500 },
+      ],
+      colordot: [
+        { iconcolor: "#FF0000", count: 12 },
+        { iconcolor: "#00FF00", count: 7 },
+      ],
+    },
+    // ...other cards
   ];
 
   /** Search term for filtering second escalated section */
-  searchTerm: string = "";
+
 
   /** Filter logic for search bar */
   get filteredDetails() {
@@ -586,7 +642,7 @@ export class EventsComponent implements OnInit {
   /** Close popup when clicking outside */
 
   /** Main table filter handling */
-  selectedFilter: string = "CLOSED"; // default
+  
 
   /** Calendar popup handling */
   isCalendarPopupOpen = false;
@@ -655,18 +711,6 @@ export class EventsComponent implements OnInit {
     this.isPlayPopupVisible = false;
     this.selectedPlayItem = null;
   }
-
-  //   // Method to handle play icon popup
-  // openPlayPopup(rowData: any) {
-  //   // You can use Angular Material Dialog, Bootstrap Modal, or any custom modal
-  //   console.log("Opening play popup for row:", rowData);
-
-  //   // Example with Angular Material Dialog:
-  //   // this.dialog.open(PlayPopupComponent, { data: rowData });
-
-  //   // Or your custom popup logic
-  //   alert("Play popup for row ID: " + rowData.siteId);
-  // }
 
   pendingColumnDefs: ColDef[] = [
     {
@@ -738,116 +782,6 @@ export class EventsComponent implements OnInit {
 
   pendingRowData = [
     {
-      id: "1234567",
-      site: "KFC - Tadepally",
-      device: "MDX712",
-      camera: "Cam 01",
-      city: "t",
-      dateTime: "2025-07-31T19:05:18",
-      actionTag: "Some Tag",
-      employee: { avatar: "assets/user1.png" },
-      more: true,
-    },
-    {
-      id: "1234568",
-      site: "KFC - Benz Circle",
-      device: "MDX713",
-      camera: "Cam 02",
-      city: "Benz Circle",
-      dateTime: "2025-07-30T14:15:00",
-      actionTag: "Another Tag",
-      employee: { avatar: "assets/user2.png" },
-      more: true,
-    },
-    {
-      id: "1234569",
-      site: "KFC - MG Road",
-      device: "MDX714",
-      camera: "Cam 03",
-      city: "MG Road",
-      dateTime: "2025-07-29T09:30:45",
-      actionTag: "Tag 3",
-      employee: { avatar: "assets/user2.png" },
-      more: true,
-    },
-    {
-      id: "1234570",
-      site: "KFC - Jubilee Hills",
-      device: "MDX715",
-      camera: "Cam 04",
-      city: "Jubilee Hills",
-      dateTime: "2025-07-28T20:20:20",
-      actionTag: "Tag 4",
-      employee: { avatar: "assets/user1.png" },
-      more: true,
-    },
-    {
-      id: "1234571",
-      site: "KFC - Hitech City",
-      device: "MDX716",
-      camera: "Cam 05",
-      city: "Hitech City",
-      dateTime: "2025-07-27T11:11:11",
-      actionTag: "Tag 5",
-      employee: { avatar: "assets/user2.png" },
-      more: true,
-    },
-    {
-      id: "1234572",
-      site: "KFC - Gachibowli",
-      device: "MDX717",
-      camera: "Cam 06",
-      city: "Gachibowli",
-      dateTime: "2025-07-26T16:45:30",
-      actionTag: "Tag 6",
-      employee: { avatar: "assets/user2.png" },
-      more: true,
-    },
-    {
-      id: "1234573",
-      site: "KFC - Kondapur",
-      device: "MDX718",
-      camera: "Cam 07",
-      city: "Kondapur",
-      dateTime: "2025-07-25T08:00:00",
-      actionTag: "Tag 7",
-      employee: { avatar: "assets/user1.png" },
-      more: true,
-    },
-    {
-      id: "1234574",
-      site: "KFC - Miyapur",
-      device: "MDX719",
-      camera: "Cam 08",
-      city: "Miyapur",
-      dateTime: "2025-07-24T13:25:50",
-      actionTag: "Tag 8",
-      employee: { avatar: "assets/user2.png" },
-      more: true,
-    },
-    {
-      id: "1234575",
-      site: "KFC - Ameerpet",
-      device: "MDX720",
-      camera: "Cam 09",
-      city: "Ameerpet",
-      dateTime: "2025-07-23T17:55:05",
-      actionTag: "Tag 9",
-      employee: { avatar: "assets/user2.png" },
-      more: true,
-    },
-    {
-      id: "1234576",
-      site: "KFC - Secunderabad",
-      device: "MDX721",
-      camera: "Cam 10",
-      city: "Secunderabad",
-      dateTime: "2025-07-22T12:10:10",
-      actionTag: "Tag 10",
-      employee: { avatar: "assets/user1.png" },
-      more: true,
-    },
-    {
       id: "1234577",
       site: "KFC - Charminar",
       device: "MDX722",
@@ -880,29 +814,35 @@ export class EventsComponent implements OnInit {
     },
   };
 
-  setFilter(filter: "CLOSED" | "PENDING") {
-    this.selectedFilter = filter;
-    if (filter === "CLOSED") {
-      this.loadClosedEvents();
-    }
+  closedGridApi: any;
+pendingGridApi: any;
+selectedFilter: 'CLOSED' | 'PENDING' = 'CLOSED';
+searchTerm: string = '';
+
+onClosedGridReady(params: any) {
+  this.closedGridApi = params.api;
+}
+
+onPendingGridReady(params: any) {
+  this.pendingGridApi = params.api;
+}
+
+setFilter(filter: 'CLOSED' | 'PENDING') {
+  this.selectedFilter = filter;
+  
+  // Clear search whenever tab changes
+  this.searchTerm = '';
+
+  // Optionally, if using ag-Grid API, reset the quick filter
+  if (this.selectedFilter === 'CLOSED' && this.closedGridApi) {
+    this.closedGridApi.setQuickFilter('');
+  } else if (this.selectedFilter === 'PENDING' && this.pendingGridApi) {
+    this.pendingGridApi.setQuickFilter('');
   }
+}
 
   // Current slide index
   currentSlideIndex: number = 0;
-
-  // // Open play popup
-  // openPlayPopup(item: any) {
-  //   this.selectedPlayItem = item;
-  //   this.isPlayPopupVisible = true;
-  //   this.currentSlideIndex = 0; // reset to first image
-  // }
-
-  // // Close popup
-  // closePlayPopup() {
-  //   this.isPlayPopupVisible = false;
-  //   this.selectedPlayItem = null;
-  //   this.currentSlideIndex = 0;
-  // }
 
   // Show previous image
   prevSlide() {
@@ -928,28 +868,25 @@ export class EventsComponent implements OnInit {
 
     // Convert "2025-08-25_03-44-39" → "2025-08-25T03:44:39"
     const isoString = value.replace("_", "T").replace(/-/g, (match, offset) => {
-      // Only replace '-' in the time part with ':'
       return offset > 9 ? ":" : "-";
     });
 
     const date = new Date(isoString);
-    return isNaN(date.getTime()) ? value : date.toLocaleString();
+    if (isNaN(date.getTime())) return value;
+
+    const pad = (num: number) => String(num).padStart(2, "0");
+
+    const year = date.getFullYear();
+    const month = pad(date.getMonth() + 1);
+    const day = pad(date.getDate());
+    const hours = pad(date.getHours());
+    const minutes = pad(date.getMinutes());
+    const seconds = pad(date.getSeconds());
+
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   }
   /** start row data for electedFilter === 'CLOSED' */
   rowData: any[] = [];
-
-  /** Auto-size a single column dynamically */
-  // autoSizeColumn(colKey: string) {
-  //   if (this.gridApi && this.gridApi.getColumnDef(colKey)) {
-  //     this.gridColumnApi = this.gridColumnApi || this.gridApi.getColumnDefs(); // fallback
-  //     this.gridApi.getColumnDef(colKey); // ensure column exists
-  //     this.gridApi.sizeColumnsToFit(); // optional: ensure grid fits width
-  //     this.gridApi.getColumnDefs(); // refresh
-  //     if (this.gridColumnApi) {
-  //       this.gridColumnApi.autoSizeColumn(colKey, true); // true = include header
-  //     }
-  //   }
-  // }
 
   /** Auto-size single column including its data */
   autoSizeColumn(colKey: string) {
@@ -1119,12 +1056,12 @@ export class EventsComponent implements OnInit {
             // 👇 separate cards for dots
             {
               iconcolor: "#FFC400",
-              value: res.counts.EventWall || 0,
+              value: res.counts.Event_Wall || 0,
               color: "#ED3237",
             },
             {
               iconcolor: "#53BF8B",
-              value: res.counts.ManualWall || 0,
+              value: res.counts.Manual_Wall || 0,
               color: "#ED3237",
             },
           ];
@@ -1183,24 +1120,6 @@ export class EventsComponent implements OnInit {
     });
   }
 
-  /** end row data for electedFilter === 'CLOSED' */
-
-  // /** Format datetime to 'MM/DD/YYYY HH:mm:ss TZ' */
-  // formatDateTime(dateStr: string) {
-  //   const d = new Date(dateStr);
-  //   return d
-  //     .toLocaleString("en-US", {
-  //       year: "numeric",
-  //       month: "2-digit",
-  //       day: "2-digit",
-  //       hour: "2-digit",
-  //       minute: "2-digit",
-  //       second: "2-digit",
-  //       hour12: false,
-  //       timeZoneName: "short",
-  //     })
-  //     .replace("GMT", "CT");
-  // }
 
   /** AG Grid locale customization to remove tooltips and ARIA labels */
   localeText = {
