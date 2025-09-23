@@ -10,88 +10,56 @@
   <!-- Navigation Menu -->
   <div class="header-section nav">
     <nav>
-      <a
-        routerLink="/dashboard"
-        routerLinkActive="active"
-        #rlaDashboard="routerLinkActive"
-      >
-        <img
-          [src]="
+      <a routerLink="/dashboard" routerLinkActive="active" #rlaDashboard="routerLinkActive">
+        <img [src]="
             rlaDashboard.isActive
               ? 'assets/headericons/dashboard-icon-active.svg'
               : 'assets/headericons/dashboard-icon.svg'
-          "
-          alt="Dashboard"
-          class="nav-icon"
-        />
+          " alt="Dashboard" class="nav-icon" />
         DASHBOARD
       </a>
 
-      <a
-        routerLink="/events"
-        routerLinkActive="active"
-        #rlaEvents="routerLinkActive"
-      >
-        <img
-          [src]="
+      <a routerLink="/events" routerLinkActive="active" #rlaEvents="routerLinkActive">
+        <img [src]="
             rlaEvents.isActive
               ? 'assets/headericons/events-icon-active.svg'
               : 'assets/headericons/events-icon.svg'
-          "
-          alt="Events"
-          class="nav-icon"
-        />
+          " alt="Events" class="nav-icon" />
         EVENTS
       </a>
 
-      <a
-        routerLink="/groups"
-        routerLinkActive="active"
-        #rlaGroups="routerLinkActive"
-      >
-        <img
-          [src]="
+      <a routerLink="/groups" routerLinkActive="active" #rlaGroups="routerLinkActive">
+        <img [src]="
             rlaGroups.isActive
               ? 'assets/headericons/groups-icon-active.svg'
               : 'assets/headericons/groups-icon.svg'
-          "
-          alt="Groups"
-          class="nav-icon"
-        />
+          " alt="Groups" class="nav-icon" />
         QUEUES
       </a>
+      <a routerLink="/clients" routerLinkActive="active" #rlaClients="routerLinkActive">
+        <img [src]="
+            rlaClients.isActive
+              ? 'assets/headericons/clints-icon-active.svg'
+              : 'assets/headericons/clients-icon.svg'
+          " alt="Clients" class="nav-icon" />
+        CLIENTS
+      </a>
 
-      <a
-        routerLink="/employees"
-        routerLinkActive="active"
-        #rlaEmployees="routerLinkActive"
-      >
-        <img
-          [src]="
+      <a routerLink="/employees" routerLinkActive="active" #rlaEmployees="routerLinkActive">
+        <img [src]="
             rlaEmployees.isActive
               ? 'assets/headericons/employees-icon-active.svg'
               : 'assets/headericons/employees-icon.svg'
-          "
-          alt="Employees"
-          class="nav-icon"
-        />
+          " alt="Employees" class="nav-icon" />
         EMPLOYEES
       </a>
 
-      <a
-        routerLink="/sites"
-        routerLinkActive="active"
-        #rlaSites="routerLinkActive"
-      >
-        <img
-          [src]="
+      <a routerLink="/sites" routerLinkActive="active" #rlaSites="routerLinkActive">
+        <img [src]="
             rlaSites.isActive
               ? 'assets/headericons/sites-icon-active.svg'
               : 'assets/headericons/sites-icon.svg'
-          "
-          alt="Sites"
-          class="nav-icon"
-        />
+          " alt="Sites" class="nav-icon" />
         SITES
       </a>
     </nav>

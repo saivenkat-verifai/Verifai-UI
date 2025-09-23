@@ -88,6 +88,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
   columnDefs: ColDef[] = [
     { headerName: "ID", field: "id", sortable: true },
     { headerName: "NAME", field: "name", sortable: true },
+    { headerName: "LEVEL", field: "level", sortable: true },
     { headerName: "SITE", field: "site" },
     { headerName: "CAMERAS", field: "cameras" },
     { headerName: "EMPLOYEES", field: "employees" },
@@ -116,6 +117,37 @@ export class GroupsComponent implements OnInit, OnDestroy {
     },
   ];
 
+  // New queue model
+newQueue = {
+  name: '',
+  level: ''
+};
+
+
+onCreateQueueClick() {
+  this.currentSection = 'queue';
+}
+
+createQueue() {
+  if (!this.newQueue.name || !this.newQueue.level) {
+    console.warn("Queue form is incomplete");
+    return;
+  }
+
+  // TODO: hook up to service (backend call)
+  console.log("Queue Created:", this.newQueue);
+
+  // Reset
+  this.newQueue = { name: '', level: ''};
+
+  // Close and go back to default section
+  this.goBack();
+}
+
+  onAddClick() {
+    this.isPopupVisible = true;
+  }
+
   defaultColDef: ColDef = { resizable: true, filter: true };
 
   /** Load data via service */
@@ -126,6 +158,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
           this.rowData = res.groupData.map((g: any) => ({
             id: g.GroupId,
             name: g.GroupName,
+            level: g.level,
             site: g.sites,
             cameras: g.cameras,
             employees: g.employees,

@@ -8,6 +8,7 @@
   </div>
 
   <div class="dashboard-content" [class.loading]="isLoading">
+    <!-- Dashboard Header -->
     <div class="dashboard-content-section">
       <div class="section-header">
         <h2>DASHBOARD</h2>
@@ -22,38 +23,41 @@
 
       <!-- Dashboard Cards -->
       <div class="cards-row">
-        <div
-          class="card"
+        <p-card
           *ngFor="let card of dashboardCards"
-          [ngClass]="card.color"
+          [ngClass]="{
+            red: card.color === 'red',
+            white: card.color === 'white'
+          }"
+          class="card"
         >
-          <div class="card-top">
-            <div class="card-top-left">
-              <p
-                class="main-number"
-                [ngClass]="{ 'red-text': card.color === 'white' }"
-              >
-                {{ card.value }}
-              </p>
-              <p
-                class="label"
-                [ngClass]="{ 'black-text': card.color === 'white' }"
-              >
-                {{ card.title | uppercase }}
-              </p>
-            </div>
-
-            <div class="card-top-right" *ngIf="card.percentage !== undefined">
-              <div class="circle-chart">
-                <div
-                  class="circle-bg"
-                  [style.background]="getCircleGradient(card.percentage)"
-                ></div>
-                <div class="circle-text">{{ card.percentage }}%</div>
+          <ng-template pTemplate="header">
+            <div class="card-top">
+              <div class="card-top-left">
+                <p
+                  class="main-number"
+                  [ngClass]="{ 'red-text': card.color === 'white' }"
+                >
+                  {{ card.value }}
+                </p>
+                <p
+                  class="label"
+                  [ngClass]="{ 'black-text': card.color === 'white' }"
+                >
+                  {{ card.title | uppercase }}
+                </p>
+              </div>
+              <div class="card-top-right" *ngIf="card.percentage !== undefined">
+                <div class="circle-chart">
+                  <div
+                    class="circle-bg"
+                    [style.background]="getCircleGradient(card.percentage)"
+                  ></div>
+                  <div class="circle-text">{{ card.percentage }}%</div>
+                </div>
               </div>
             </div>
-          </div>
-
+          </ng-template>
           <div class="icons-row">
             <div class="dots-column">
               <div class="icon" *ngFor="let dot of card.colordot">
@@ -64,7 +68,6 @@
                 <span>{{ dot.count }}</span>
               </div>
             </div>
-
             <div class="icons-group">
               <div class="icon" *ngFor="let icon of card.icons">
                 <img [src]="icon.iconPath" alt="icon" />
@@ -72,23 +75,24 @@
               </div>
             </div>
           </div>
-        </div>
+        </p-card>
       </div>
     </div>
 
-    <!-- SUSPICIOUS Section -->
+    <!-- Escalated Section -->
     <div class="escalated-content-section">
       <div class="section-header">
         <h2>ESCALATED</h2>
       </div>
       <div class="section-body">
         <div class="escalated-section">
-          <div class="escalated-card" *ngFor="let e of escalatedDetails">
-            <div class="escalated-card-content">
-              <h4>{{ e.label }}</h4>
-              <p [ngStyle]="{ color: e.color }">{{ e.value }}</p>
-            </div>
-
+          <p-card *ngFor="let e of escalatedDetails" class="escalated-card">
+            <ng-template pTemplate="header">
+              <div class="escalated-card-content">
+                <h4>{{ e.label }}</h4>
+                <p [ngStyle]="{ color: e.color }">{{ e.value }}</p>
+              </div>
+            </ng-template>
             <div class="icons">
               <div class="dots-column" *ngIf="e.colordot">
                 <div class="icon-section" *ngFor="let dot of e.colordot">
@@ -99,7 +103,6 @@
                   <span>{{ dot.count }}</span>
                 </div>
               </div>
-
               <div class="icons-group" *ngIf="e.icons">
                 <div class="icon-section" *ngFor="let icon of e.icons">
                   <img
@@ -114,7 +117,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </p-card>
         </div>
       </div>
     </div>

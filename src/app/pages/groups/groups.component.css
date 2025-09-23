@@ -21,6 +21,14 @@
     src: url('/assets/fonts/Nasalization Rg.otf') format('opentype');
 }
 
+.createbutton {
+       height: 30px;
+    border: 1px solid black;
+    background-color: white;
+    color: black;
+    border-radius: 3px;
+}
+
 /* === DASHBOARD CONTAINER === */
 .dashboard-container {
     font-family: 'Neometric Regular';

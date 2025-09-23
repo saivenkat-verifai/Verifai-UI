@@ -1,100 +1,140 @@
+<!-- <div class="calendar-header">
+  <p-dropdown [options]="viewOptions" [(ngModel)]="viewMode" placeholder="DAY" class="view-select" styleClass="w-12"
+    [showClear]="false">
+  </p-dropdown>
+  <p-button label="TODAY" class="today-btn" (onClick)="goToday()"> </p-button>
+  <button class="circle-btn" (click)="prevMonth()">
+    <img class="calenderimage" src="../../../assets/arrow-circle-left.svg" alt="" />
+  </button>
+  <span class="selected-range" #rangeTrigger (click)="op.toggle($event)">
+    {{ startDate | date : "dd MMM, yyyy HH:mm a" }} -
+    {{ endDate | date : "dd MMM, yyyy HH:mm a" }}
+  </span>
+  <button class="circle-btn" (click)="nextMonth()">
+    <img class="calenderimage" src="../../../assets/arrow-circle-right.svg" alt="" />
+  </button>
+
+  <p-button class="custom-today-btn" (click)="op.toggle($event)">
+    <ng-template pTemplate="icon">
+      <img class="calenderimage" src="../../../assets/calender.svg" alt="" />
+    </ng-template>
+  </p-button>
+</div> -->
+
 <div class="calendar-header">
-  <!-- Left controls -->
-  <select class="view-select" [(ngModel)]="viewMode">
-    <option value="day">DAY</option>
-    <option value="week">WEEK</option>
-    <option value="month">MONTH</option>
-    <option value="custom">CUSTOM</option>
-  </select>
+  <p-dropdown [options]="viewOptions" [(ngModel)]="viewMode" placeholder="DAY" class="view-select" styleClass="w-12"
+    [showClear]="false">
+  </p-dropdown>
+  <p-button label="TODAY" class="today-btn" (onClick)="goToday()"> </p-button>
 
-  <button class="today-btn" (click)="goToday()">TODAY</button>
-
-  <button class="circle-btn black" (click)="prevMonth()">
-    <img src="assets/arrow-circle-left.svg" alt="Dashboard" class="nav-icon" />
+<ng-container *ngIf="viewMode !== 'week'">
+  <button class="circle-btn" (click)="prevMonth()">
+    <img class="calenderimage" src="../../../assets/arrow-circle-left.svg" alt="" />
   </button>
 
-  <!-- Selected date/time range -->
+  <span class="selected-range" #rangeTrigger (click)="op.toggle($event)">
+    {{ startDate | date : "dd MMM, yyyy HH:mm a" }} -
+    {{ endDate | date : "dd MMM, yyyy HH:mm a" }}
+  </span>
 
- <div class="selected-range">
-  {{ startDate | date: 'yyyy-MM-dd' | uppercase }} {{ startTime }} -
-  {{ endDate | date: 'yyyy-MM-dd' | uppercase }} {{ endTime }}
-</div>
+  <button class="circle-btn" (click)="nextMonth()">
+    <img class="calenderimage" src="../../../assets/arrow-circle-right.svg" alt="" />
+  </button>
+</ng-container>
 
-  <button class="circle-btn grey" (click)="nextMonth()">
-    <img src="assets/arrow-circle-right.svg" alt="Dashboard" />
+<div class="week-cards" *ngIf="viewMode === 'week'">
+  <button class="circle-btn" (click)="prevWeekWindow()">
+    <img class="calenderimage" src="../../../assets/arrow-circle-left.svg" alt="" />
   </button>
 
-  <button class="circle-btn red" (click)="togglePopup()">
-    <img src="assets/calender.svg" alt="Dashboard" class="nav-icon" />
-  </button>
-</div>
-
-<!-- Popup calendar -->
-<!-- Popup modal -->
-<div class="calendar-popup" *ngIf="showPopup">
-  <div class="popup-container">
-    <!-- Header with checkbox -->
-    <div class="popup-header">
-      <label>
-        <input
-          type="checkbox"
-          [(ngModel)]="daterange"
-          (change)="toggleDateRange()"
-        />
-        Date Range
-      </label>
-      <label>
-        <input
-          type="checkbox"
-          [(ngModel)]="wholeDay"
-          (change)="toggleWholeDay()"
-        />
-        Whole Day
-      </label>
-    </div>
-
-    <!-- Date & Time Inputs -->
-    <div class="date-time-inputs">
-      <div class="input-group">
-        <div class="datelabel">
-          <label class="label">Start Date & Time</label>
-        </div>
-        <div class="combined-input">
-          <img src="assets/calender.svg" class="icon calendar-icon" />
-
-          <!-- Single input with dynamic type -->
-          <input
-            [type]="wholeDay ? 'date' : 'datetime-local'"
-            [(ngModel)]="startValue"
-            class="inputdatetime"
-          />
-        </div>
-      </div>
-
-      <div class="input-group">
-        <div class="datelabel">
-          <label class="label">End Date & Time</label>
-        </div>
-
-        <div class="combined-input">
-          <img src="assets/calender.svg" class="icon calendar-icon" />
-
-          <!-- Single input with dynamic type -->
-          <input
-            [type]="wholeDay ? 'date' : 'datetime-local'"
-            [(ngModel)]="endValue"
-            class="inputdatetime"
-          />
-        </div>
-      </div>
-
-      <div class="input-group">
-        <button class="circle-btn submitdate" (click)="confirmSelection()">
-          &rightarrow;
-        </button>
-      </div>
-
-      <!-- Red arrow button -->
-    </div>
+  <div class="week-card" 
+       *ngFor="let week of visibleWeekWindow()" 
+       (click)="selectWeek(week)" 
+       [class.active]="currentWeekIndex === weeks.indexOf(week)">
+    {{ week.label }} <br>
+    {{ week.start | date:'MMM d, yyyy' }} - {{ week.end | date:'MMM d, yyyy' }}
   </div>
+
+  <button class="circle-btn" (click)="nextWeekWindow()">
+    <img class="calenderimage" src="../../../assets/arrow-circle-right.svg" alt="" />
+  </button>
 </div>
+
+  <p-button class="custom-today-btn" (click)="op.toggle($event)">
+    <ng-template pTemplate="icon">
+      <img class="calenderimage" src="../../../assets/calender.svg" alt="" />
+    </ng-template>
+  </p-button>
+</div>
+
+<p-overlayPanel #op [dismissable]="true" [showCloseIcon]="false">
+  <ng-template pTemplate>
+    <div class="popup-container">
+      <form class="p-fluid">
+        <div class="popup-header">
+          <div class="date-time-inputs">
+            <div class="input-group">
+              <div class="p-field-checkbox">
+                <p-checkbox name="remember" label="Date Range" [(ngModel)]="dateRange" [binary]="true">
+                </p-checkbox>
+              </div>
+            </div>
+            <div class="input-group">
+              <div class="p-field-checkbox">
+                <p-checkbox name="remember" label="Whole Day" [(ngModel)]="wholeday" [binary]="true">
+                </p-checkbox>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <div class="date-time-inputs">
+        <div class="input-group">
+          <label for="startDateTime" class="label p-b-10">Start Date & Time</label>
+          <p-calendar id="startDateTime" [(ngModel)]="startDate" [showTime]="true" [hourFormat]="'12'"
+            dateFormat="dd/mm/yy" [timeOnly]="false" inputId="start" class="inputdatetime" [readonlyInput]="true"
+            appendTo="body" [maxDate]="today">
+          </p-calendar>
+        </div>
+
+        <div class="input-group">
+          <label for="endDateTime" class="label p-b-10">End Date & Time</label>
+          <p-calendar id="endDateTime" [(ngModel)]="endDate" [showTime]="true" [hourFormat]="'12'" dateFormat="dd/mm/yy"
+            [timeOnly]="false" inputId="end" class="inputdatetime" [readonlyInput]="true" appendTo="body"
+            [maxDate]="today">
+          </p-calendar>
+        </div>
+        <div class="popup-footer">
+          <p-button label="Confirm" severity="danger" (onClick)="confirmSelection(op)" class="submitdate">
+          </p-button>
+        </div>
+      </div>
+
+      <div class="custom-calendar" *ngIf="viewMode === 'month'">
+        <div class="month-header">
+          <button class="circle-btn" (click)="prevMonth()">&lt;</button>
+          <span>{{ currentMonth | date : "MMMM yyyy" }}</span>
+          <button class="circle-btn" (click)="nextMonth()">&gt;</button>
+        </div>
+        <div class="weekdays">
+          <div>S</div>
+          <div>M</div>
+          <div>T</div>
+          <div>W</div>
+          <div>T</div>
+          <div>F</div>
+          <div>S</div>
+        </div>
+        <div class="days-grid">
+          <div *ngFor="let day of daysInMonth" class="day" [class.empty]="!day.date"
+            [class.selected]="day.date && isSelected(day.date)" (click)="day.date && selectDate(day.date)">
+            {{ day.date ? (day.date | date : "d") : "" }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</p-overlayPanel>
+
+<!-- Removed the hidden trigger div since we're using explicit triggers -->

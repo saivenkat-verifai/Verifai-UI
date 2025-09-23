@@ -1,45 +1,34 @@
 <div class="login-container">
   <div class="left-panel">
-    <div class="overlay"></div>
+    <div class="graphics-overlay"></div>
   </div>
   <div class="right-panel">
-    <div class="login-box">
-      <img src="assets/logo.png" alt="VERIFAI Logo" class="logo-img" />
-      <h1 class="mb40 heading">Welcome to sign in</h1>
-
-      <!-- Add (ngSubmit) and #loginForm="ngForm" for Angular form -->
-      <form (ngSubmit)="login()" #loginForm="ngForm">
-        <!-- Bind inputs with ngModel and name attributes -->
-        <span class="username-label">Username</span>
-        <input
-          type="text"
-          placeholder="Enter Username"
-          name="username"
-          [(ngModel)]="username"
-          required
-        />
-        <span class="password-label">Password</span>
-        <input
-          type="password"
-          placeholder="Password here"
-          name="password"
-          [(ngModel)]="password"
-          required
-        />
-
-        <div class="extras">
-          <label class="remember-me">
-            <input type="checkbox" />
-            Remember Password
-          </label>
-          <a class="forget-password" href="#">Forgot Password?</a>
+    <p-card [style]="{ width: '360px' }">
+      <img src="../../assets/logo.png" alt="VerifAI LIVE Logo" class="logo" />
+      <form (ngSubmit)="login()" class="p-fluid">
+        <div class="p-card-header">Welcome to sign in</div>
+        <div class="p-field">
+          <label class="p-t-b-10 font-label" for="username">Username</label>
+          <input pInputText id="username" placeholder="" [(ngModel)]="username" name="username" />
         </div>
-
-        <button type="submit" [disabled]="!loginForm.form.valid">LOG IN</button>
+        <div class="p-field">
+          <label class="p-t-b-10 font-label" for="password">Password</label>
+          <p-password id="password" placeholder="Password Here" [(ngModel)]="password" name="password" [feedback]="false"></p-password>
+        </div>
+        <div class="p-field-forgetpassword p-t-20">
+          <a href="#" class="forgot-link font-label">Forgot Password?</a>
+        </div>
+        <div class="p-field-checkbox">
+        <p-checkbox 
+            name="remember" 
+            label="Remember Password" 
+            [(ngModel)]="rememberMe" 
+            [binary]="true">
+          </p-checkbox>
+        </div>
+        <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+        <p-button label="LOG IN" styleClass="p-button-danger" [style]="{ width: '100%' }" type="submit"></p-button>
       </form>
-
-      <!-- Show error message -->
-      <div class="error" *ngIf="errorMessage">{{ errorMessage }}</div>
-    </div>
+    </p-card>
   </div>
 </div>

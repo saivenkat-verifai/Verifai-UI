@@ -6,11 +6,29 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class EventsService {
-  private apiUrl = 'https://usstaging.ivisecurity.com/events_data/getEventReportFullData_1_0';
+  private eventReportFullData = 'https://usstaging.ivisecurity.com/events_data/getEventReportFullData_1_0';
+  private actionTagCategoriesUrl = 'https://usstaging.ivisecurity.com/events_data/getActionTagCategories_1_0';
+  private pendingMessagesUrl = 'https://stagingmq.ivisecurity.com/queueManagement/getEventsPendingMessages_1_0?level=1';
+  private eventReportCountsForActionTag = 'https://usstaging.ivisecurity.com/events_data/getEventReportCountsForActionTag_1_0';
 
   constructor(private http: HttpClient) {}
 
-  getSuspiciousEvents(): Observable<any> {
-    return this.http.get<any>(this.apiUrl);
+  getSuspiciousEvents(suspiciousChecked: any): Observable<any> {
+    // Send suspiciousChecked as a query parameter
+    return this.http.get<any>(`${this.eventReportFullData}?suspiciousChecked=${suspiciousChecked}`);
   }
+
+  getEventsPendingEventa(): Observable<any> {
+    // Replace with the correct API endpoint if needed
+    return this.http.get<any>(`${this.pendingMessagesUrl}`);
+  }
+  getActionTagCategories(): Observable<any> {
+    return this.http.get<any>(this.actionTagCategoriesUrl);
+  }
+
+getEventReportCountsForActionTag(date: string, actionTag: number): Observable<any> {
+  const url = `${this.eventReportCountsForActionTag}?date=${date}&actionTag=${actionTag}`;
+  return this.http.get<any>(url);
+}
+
 }

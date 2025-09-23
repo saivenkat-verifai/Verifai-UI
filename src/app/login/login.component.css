@@ -1,148 +1,224 @@
 @font-face {
+  font-family: 'Neometric Bold';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Neometric'), url('https://fonts.cdnfonts.com/s/18720/Unnamed Bold (Regular).woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Neometric Medium';
+  font-style: normal;
+  font-weight: 500;
+  src: local('Neometric'), url('https://fonts.cdnfonts.com/s/18720/Neometric Medium (Regular).woff') format('woff');
+}
+
+@font-face {
   font-family: 'Neometric Regular';
   font-style: normal;
   font-weight: 400;
-  src: local('Neometric'), url('https://fonts.cdnfonts.com/s/18720/Neometric-Regular.woff') format('woff');
+  src: url('/assets/fonts/Neometric-Regular.woff') format('woff');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Neometric Light';
+  src: url('/assets/neometric/Neometric-Light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Nasalization';
+  /* font-style: normal; */
+  /* font-weight: 400; */
+  src: local('Nasalization'), url('https://fonts.cdnfonts.com/s/26353/NASALIZA.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'NasalizationLight';
+  font-style: normal;
+  /* font-weight: 400; */
+  src: url('/assets/fonts/Nasalization Rg.otf') format('opentype'),
+}
+
+.p-field-checkbox {
+  padding-bottom: 20px;
+  padding-top: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.font-label{
+  font-family: 'Neometric Regular';
+  font-size: 14px;
+  color: #000000;
 }
 
 .login-container {
   display: flex;
   height: 100vh;
-  font-family: 'Neometric Regular';
+  width: 100vw;
 }
 
-.left-panel {
-  flex: 2;
-  background: url('/assets/login-bg.png') center/cover no-repeat;
-  position: relative;
-}
-
-.heading {
-  font-family: 'Neometric Regular';
-  font-size: 20px;
-  font-weight: 100;
-  font-style: normal;
-  line-height: 24px;
-  /* something readable */
-  letter-spacing: 0;
-  /* if XD had it */
-  opacity: 0.5;
-  text-align: center;
-  color: #000000;
-}
-
-.logo-img {
-  height: 100px;
-  vertical-align: middle;
-  margin-right: 8px;
-}
-
-.overlay {
-  background-color: rgba(255, 0, 0, 0.5);
-  height: 100%;
-  width: 100%;
-  position: absolute;
-}
-
-.right-panel {
-  flex: 1;
+.p-field {
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  padding-top: 20px;
+}
+
+.p-field-forgetpassword {
+  display: flex;
+  justify-content: flex-end;
   align-items: center;
 }
 
-.login-box {
-  width: 300px;
+.p-t-20 {
+  padding-top: 20px;
+}
+
+.p-t-b-10 {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+:host ::ng-deep .p-password .p-password-input {
+  width: -webkit-fill-available;
+  height: 45px;
+  background: var(--unnamed-color-ffffff) 0% 0% no-repeat padding-box;
+  background: #FFFFFF 0% 0% no-repeat padding-box;
+  border: 1px solid #EEEEEE;
+  border-radius: 5px;
+  opacity: 1;
+}
+
+:host ::ng-deep .p-inputtext {
+  width: -webkit-fill-available;
+  height: 45px;
+
+  background: var(--unnamed-color-ffffff) 0% 0% no-repeat padding-box;
+  background: #FFFFFF 0% 0% no-repeat padding-box;
+  border: 1px solid #EEEEEE;
+  border-radius: 5px;
+  opacity: 1;
+}
+
+:host ::ng-deep .p-button {
+  width: -webkit-fill-available;
+  height: 45px;
+
+  background: var(--unnamed-color-ffffff) 0% 0% no-repeat padding-box;
+  background: #ED3237 0% 0% no-repeat padding-box;
+  border: 1px solid #EEEEEE;
+  color: white;
+  border-radius: 5px;
+  opacity: 1;
+}
+
+:host ::ng-deep .p-button-label {
+  /* UI Properties */
+  color: var(--unnamed-color-ffffff);
+  text-align: center;
+  font-family: 'Neometric Medium';
+  letter-spacing: 0px;
+  font-size: 16px;
+  color: #FFFFFF;
+  opacity: 1;
+}
+
+
+.logo {
+  display: block;
+  margin: 0 auto 20px auto;
+  height: 100px;
+}
+
+.p-card .p-card-header {
+  font-size: 16px;
+  /* Match subheader size from screenshot */
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.graphics-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('/assets/images/login-bg.png') no-repeat center/cover;
+  opacity: 0.3;
+}
+
+.p-card-header {
+  color: #333;
+  display: flex;
+  justify-content: center;
+  font-family: 'Neometric Regular';
+  font-size: 20px;
+  letter-spacing: 0px;
+  color: #000000;
+  opacity: 0.5;
+}
+
+
+.left-panel {
+  flex: 1;
+  background-color: #d32f2f;
+  /* Red from screenshot */
+  position: relative;
+  overflow: hidden;
+}
+
+.graphics-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('../../assets/login-bg.png') no-repeat center/cover;
+  /* Add your image or SVG for camera/face graphics */
+  opacity: 0.3;
+  /* Faint as in screenshot */
+}
+
+.right-panel {
+  flex: 0 0 450px;
+  /* Fixed width for form */
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.p-card {
   text-align: center;
 }
 
-.login-box p {
-  font-size: 20px;
-  font-family: 'Neometric Regular';
-  opacity: 50%;
-}
-
-.logo {
+.p-card .p-card-header {
   font-size: 24px;
-  font-weight: bold;
+  color: #333;
 }
 
-.ai {
-  color: red;
+.p-card .p-card-subheader {
+  font-size: 16px;
+  color: #666;
 }
 
-.live {
-  font-size: 14px;
-  color: red;
+.forgot-link {
+  margin-left: auto;
+  color: #d32f2f;
+  text-decoration: none;
 }
 
-input[type="text"],
-input[type="password"] {
-  width: 100%;
-  margin: 0 0 20px 0;
-  padding: 10px;
-  opacity: 0.5;
-  box-sizing: border-box;
+/* Custom overrides for PrimeNG theme */
+.p-button.p-button-danger {
+  background-color: #d32f2f;
+  border-color: #d32f2f;
 }
 
-.extras {
-  display: flex;
-  justify-content: space-between;
-  font-size: 12px;
-  margin: 10px 0;
-}
-
-button {
-  background-color: red;
-  color: white;
-  border: none;
-  padding: 10px;
-  width: 100%;
-  font-weight: bold;
-  cursor: pointer;
-  font-family: 'Neometric Regular';
- border-radius: 5px;
- font-size: 16px;
-}
-
-.username-label {
-  font-family: 'Neometric Regular';
-  margin-bottom: 5px;
-
-  display: block;
-  text-align: left;
-  font-size: 14px;
-
-}
-
-.forget-password {
-  font-family: 'Neometric Regular';
-  font-size: 12px;
-  opacity: 1;
-  color: #ED3237;
-}
-
-.remember-me {
-  font-family: 'Neometric Regular';
-  font-size: 12px;
-  opacity: 1;
-}
-
-.password-label {
-  font-family: 'Neometric Regular';
-  margin-bottom: 5px;
-  display: block;
-  text-align: left;
-  font-size: 14px;
-}
-
-.mb40 {
-  margin-bottom: 40px;
-}
-.mb25 {
-  margin-bottom: 25px;
-}
-
-.mb10 {
-  margin-bottom: 10px;
+.p-inputtext,
+.p-password {
+  border-radius: 4px;
 }

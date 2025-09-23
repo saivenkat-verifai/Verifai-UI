@@ -10,7 +10,7 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^17.3.0",
+    "@angular/animations": "^17.3.12",
     "@angular/cdk": "^17.3.0",
     "@angular/common": "^17.3.0",
     "@angular/compiler": "^17.3.0",
@@ -23,8 +23,12 @@
     "ag-grid-angular": "^34.1.2",
     "ag-grid-community": "^34.1.2",
     "ag-grid-enterprise": "^34.1.2",
+    "chart.js": "^4.5.0",
     "highcharts": "^12.3.0",
     "highcharts-angular": "^3.0.0",
+    "primeflex": "^4.0.0",
+    "primeicons": "^7.0.0",
+    "primeng": "^17.18.15",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.10"

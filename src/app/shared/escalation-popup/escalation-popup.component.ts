@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AgGridModule } from 'ag-grid-angular';
 import { ColDef } from 'ag-grid-community';
+import { DialogModule } from 'primeng/dialog';
 
 @Component({
   selector: 'app-escalation-popup',
@@ -11,6 +12,7 @@ import { ColDef } from 'ag-grid-community';
   imports: [
     CommonModule,
     AgGridModule,
+    DialogModule,
     // Import necessary modules here if needed
   ],
 })
