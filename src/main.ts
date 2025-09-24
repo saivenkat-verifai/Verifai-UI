@@ -10,7 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatNativeDateModule } from '@angular/material/core';
 import { BrowserAnimationsModule, provideAnimations } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import {} from '@angular/common/http';
 import { AgGridModule } from 'ag-grid-angular';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
@@ -59,7 +59,6 @@ bootstrapApplication(AppComponent, {
       MatButtonModule,
       MatNativeDateModule,
       BrowserAnimationsModule,
-      HttpClientModule,
       AgGridModule,
       HighchartsChartModule
     )
