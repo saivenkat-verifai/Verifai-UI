@@ -6,11 +6,10 @@ import * as Highcharts from 'highcharts';
 
 
 @Component({
-  selector: 'app-line-chart',
-  templateUrl: './line-chart.component.html',
-  styleUrls: ['./line-chart.component.css'],
-  standalone: true,
-  imports: [HighchartsChartModule],
+    selector: 'app-line-chart',
+    templateUrl: './line-chart.component.html',
+    styleUrls: ['./line-chart.component.css'],
+    imports: [HighchartsChartModule]
 })
 export class LineChartComponent implements OnChanges {
   @Input() chartMode: 'suspiciousHourlyData' | 'otherMode' = 'suspiciousHourlyData';

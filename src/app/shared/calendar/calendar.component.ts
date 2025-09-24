@@ -9,20 +9,19 @@ import { ButtonModule } from "primeng/button";
 import { OverlayPanelModule } from "primeng/overlaypanel";
 
 @Component({
-  selector: "app-calendar",
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    DropdownModule,
-    CheckboxModule,
-    RadioButtonModule,
-    CalendarModule,
-    ButtonModule,
-    OverlayPanelModule,
-  ],
-  templateUrl: "./calendar.component.html",
-  styleUrls: ["./calendar.component.css"],
+    selector: "app-calendar",
+    imports: [
+        CommonModule,
+        FormsModule,
+        DropdownModule,
+        CheckboxModule,
+        RadioButtonModule,
+        CalendarModule,
+        ButtonModule,
+        OverlayPanelModule,
+    ],
+    templateUrl: "./calendar.component.html",
+    styleUrls: ["./calendar.component.css"]
 })
 export class CalendarComponent implements OnInit {
   @Output() dateRangeSelected = new EventEmitter<{

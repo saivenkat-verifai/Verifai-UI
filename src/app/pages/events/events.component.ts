@@ -20,19 +20,18 @@ interface EscalatedDetail { label: string; value: number; color: string; icons?:
 interface SecondEscalatedDetail { label?: string; value?: number; iconPath?: string; color?: string; iconcolor?: string; }
 
 @Component({
-  selector: "app-events",
-  templateUrl: "./events.component.html",
-  styleUrls: ["./events.component.css"],
-  standalone: true,
-  imports: [
-    CommonModule,
-    // EscalationPopupComponent,
-    AgGridModule,
-    FormsModule,
-    MatNativeDateModule,
-    MatDatepickerModule,
-    CalendarComponent,
-  ],
+    selector: "app-events",
+    templateUrl: "./events.component.html",
+    styleUrls: ["./events.component.css"],
+    imports: [
+        CommonModule,
+        // EscalationPopupComponent,
+        AgGridModule,
+        FormsModule,
+        MatNativeDateModule,
+        MatDatepickerModule,
+        CalendarComponent,
+    ]
 })
 export class EventsComponent implements OnInit {
   /** -------------------- Dates -------------------- */

@@ -22,22 +22,19 @@ interface DashboardCard {
 }
 
 @Component({
-  selector: "app-dashboard",
-  templateUrl: "./dashboard.component.html",
-  styleUrls: ["./dashboard.component.css"],
-  standalone: true,
-  imports: [
-    CommonModule,
-    
-// TODO: `HttpClientModule` should not be imported into a component directly.
-// Please refactor the code to add `provideHttpClient()` call to the provider list in the
-// application bootstrap logic and remove the `HttpClientModule` import from this component.
-
-    CardModule,
-    ColumnChartComponent,
-    CalendarComponent,
-    LineChartComponent,
-  ],
+    selector: "app-dashboard",
+    templateUrl: "./dashboard.component.html",
+    styleUrls: ["./dashboard.component.css"],
+    imports: [
+        CommonModule,
+        // TODO: `HttpClientModule` should not be imported into a component directly.
+        // Please refactor the code to add `provideHttpClient()` call to the provider list in the
+        // application bootstrap logic and remove the `HttpClientModule` import from this component.
+        CardModule,
+        ColumnChartComponent,
+        CalendarComponent,
+        LineChartComponent,
+    ]
 })
 export class DashboardComponent implements OnInit {
   currentDate = new Date();

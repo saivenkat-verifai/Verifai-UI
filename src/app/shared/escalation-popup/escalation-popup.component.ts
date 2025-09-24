@@ -5,16 +5,15 @@ import { ColDef } from 'ag-grid-community';
 import { DialogModule } from 'primeng/dialog';
 
 @Component({
-  selector: 'app-escalation-popup',
-  templateUrl: './escalation-popup.component.html',
-  styleUrls: ['./escalation-popup.component.css'],
-  standalone: true,
-  imports: [
-    CommonModule,
-    AgGridModule,
-    DialogModule,
-    // Import necessary modules here if needed
-  ],
+    selector: 'app-escalation-popup',
+    templateUrl: './escalation-popup.component.html',
+    styleUrls: ['./escalation-popup.component.css'],
+    imports: [
+        CommonModule,
+        AgGridModule,
+        DialogModule,
+        // Import necessary modules here if needed
+    ]
 })
 export class EscalationPopupComponent {
   @Input() isVisible = false;

@@ -18,11 +18,10 @@ interface SecondEscalatedDetail {
 }
 
 @Component({
-  selector: "app-groups",
-  templateUrl: "./groups.component.html",
-  styleUrls: ["./groups.component.css"],
-  standalone: true,
-  imports: [CommonModule, FormsModule, GroupsPopupComponent, AgGridModule],
+    selector: "app-groups",
+    templateUrl: "./groups.component.html",
+    styleUrls: ["./groups.component.css"],
+    imports: [CommonModule, FormsModule, GroupsPopupComponent, AgGridModule]
 })
 export class GroupsComponent implements OnInit, OnDestroy {
   currentDate: Date = new Date();

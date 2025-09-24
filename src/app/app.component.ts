@@ -7,11 +7,10 @@ import { CommonModule } from '@angular/common';
 
 
 @Component({
-  selector: 'app-root',
-   standalone: true,
-  imports: [CommonModule, RouterModule, HeaderComponent],
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+    selector: 'app-root',
+    imports: [CommonModule, RouterModule, HeaderComponent],
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
   showHeader = true;
