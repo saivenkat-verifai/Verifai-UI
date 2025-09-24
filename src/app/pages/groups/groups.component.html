@@ -3,7 +3,10 @@
     <!-- === LEFT SIDE (8 columns) === -->
     <div class="left-section">
       <div class="section-header">
-        <h2>GROUPS</h2>
+        <h2>QUEUES</h2>
+       <button class="createbutton" (click)="onCreateQueueClick()">
+  CREATE QUEUE
+</button>
       </div>
 
       <div class="calender-section-body">
@@ -71,81 +74,157 @@
     </div>
 
     <!-- === RIGHT SIDE (4 columns) === -->
-  <!-- Default Right Section -->
-<div class="right-section" *ngIf="currentSection === 'default'">
-  <div class="popup-header">
-    <div class="popup-header-content">
-      <div class="icon-info">
-        <p class="label nomargin">{{ selectedItem?.name }}</p>
+    <!-- Default Right Section -->
+    <div class="right-section" *ngIf="currentSection === 'default'">
+      <div class="popup-header">
+        <div class="popup-header-content">
+          <div class="icon-info">
+            <p class="label nomargin">{{ selectedItem?.name }}</p>
+          </div>
+        </div>
+        <div class="navigation-controls">
+          <button class="arrow left-arrow" (click)="prevItem()">←</button>
+          <p class="nomargin">{{ currentIndex + 1 }}/{{ rowData.length }}</p>
+          <button class="arrow right-arrow" (click)="nextItem()">→</button>
+        </div>
+      </div>
+      <div class="popup-body">
+        <div class="escalated-content-section">
+          <app-groups-popup
+            *ngIf="selectedItem"
+            [data]="selectedItem"
+            (sectionChange)="onSectionChange($event)"
+          >
+          </app-groups-popup>
+        </div>
       </div>
     </div>
-    <div class="navigation-controls">
-      <button class="arrow left-arrow" (click)="prevItem()">←</button>
-      <p class="nomargin">{{ currentIndex + 1 }}/{{ rowData.length }}</p>
-      <button class="arrow right-arrow" (click)="nextItem()">→</button>
-    </div>
-  </div>
-  <div class="popup-body">
-    <div class="escalated-content-section">
-      <app-groups-popup
-        *ngIf="selectedItem"
-        [data]="selectedItem"
-        (sectionChange)="onSectionChange($event)">
-      </app-groups-popup>
-    </div>
-  </div>
-</div>
 
-<!-- ADD Section (Dynamic for Site/Camera/Employee) -->
-<div 
-  class="right-section" 
-  *ngIf="currentSection !== 'default'" 
-  [ngClass]="'add-section'">
+    <!-- ADD Section (Dynamic for Site/Camera/Employee) -->
+   <!-- ADD Section (Dynamic for Site/Camera/Employee/Queue) -->
+<div
+  class="right-section"
+  *ngIf="currentSection !== 'default'"
+  [ngClass]="'add-section'"
+>
   <div class="popup-header">
-<button class="right-arrow" (click)="goBack()">←</button>
+    <button class="right-arrow" (click)="goBack()">←</button>
     <p class="label nomargin">ADD {{ currentSection | titlecase }}</p>
   </div>
-<div class="popup-body">
-  <!-- ADD Site / ADD Camera Form -->
-  <form class="add-form" *ngIf="currentSection === 'site' || currentSection === 'camera'">
-    <!-- Select Group -->
-<div class="form-group">
-  <label for="group">Select Group</label>
-  <select id="group" class="form-control" disabled>
-    <option [value]="selectedItem?.id">{{ selectedItem?.name }}</option>
-  </select>
-</div>
 
-    <!-- Select Site -->
-    <div class="form-group">
-      <label for="site">Select Site</label>
-      <select id="site" class="form-control">
-        <option value="">-- Select Site --</option>
-        <option *ngFor="let site of sites" [value]="site.id">{{ site.name }}</option>
-      </select>
+  <div class="popup-body">
+    <!-- ADD Site / ADD Camera Form -->
+    <form
+      class="add-form"
+      *ngIf="currentSection === 'site' || currentSection === 'camera'"
+    >
+      <!-- Select Group -->
+      <div class="form-group">
+        <label for="group">Select Group</label>
+        <select id="group" class="form-control" disabled>
+          <option [value]="selectedItem?.id">
+            {{ selectedItem?.name }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Select Site -->
+      <div class="form-group">
+        <label for="site">Select Site</label>
+        <select id="site" class="form-control">
+          <option value="">-- Select Site --</option>
+          <option *ngFor="let site of sites" [value]="site.id">
+            {{ site.name }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Select Camera (only for ADD Camera) -->
+      <div class="form-group" *ngIf="currentSection === 'camera'">
+        <label for="camera">Select Camera</label>
+        <select id="camera" class="form-control">
+          <option value="">-- Select Camera --</option>
+          <option *ngFor="let camera of cameras" [value]="camera.id">
+            {{ camera.name }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="form-actions">
+        <button type="button" class="btn cancel-btn" (click)="goBack()">
+          Cancel
+        </button>
+        <button type="submit" class="btn add-btn">Add</button>
+      </div>
+    </form>
+
+    <!-- ADD Employee -->
+    <div *ngIf="currentSection === 'employee'">
+      <!-- Body intentionally left blank -->
     </div>
 
-    <!-- Select Camera (only for ADD Camera) -->
-    <div class="form-group" *ngIf="currentSection === 'camera'">
-      <label for="camera">Select Camera</label>
-      <select id="camera" class="form-control">
-        <option value="">-- Select Camera --</option>
-        <option *ngFor="let camera of cameras" [value]="camera.id">{{ camera.name }}</option>
-      </select>
-    </div>
+    <!-- ADD Queue -->
+    <form
+      class="add-form"
+      *ngIf="currentSection === 'queue'"
+      (ngSubmit)="createQueue()"
+    >
+      <!-- Queue Name -->
+      <div class="form-group">
+        <label for="queueName">Queue Name</label>
+        <input
+          id="queueName"
+          name="queueName"
+          class="form-control"
+          [(ngModel)]="newQueue.name"
+          required
+        />
+      </div>
 
-    <!-- Action Buttons -->
-    <div class="form-actions">
-      <button type="button" class="btn cancel-btn" (click)="goBack()">Cancel</button>
-      <button type="submit" class="btn add-btn">Add</button>
-    </div>
-  </form>
+      <!-- Queue Level -->
+      <div class="form-group">
+        <label for="queueLevel">Level</label>
+        <select
+          id="queueLevel"
+          name="queueLevel"
+          class="form-control"
+          [(ngModel)]="newQueue.level"
+          required
+        >
+          <option value="">-- Select Level --</option>
+          <option value="L1">L1</option>
+          <option value="L2">L2</option>
+          <option value="L3">L3</option>
+        </select>
+      </div>
 
-  <!-- ADD Employee (Blank for now) -->
-  <div *ngIf="currentSection === 'employee'">
-    <!-- Body intentionally left blank -->
+      <!-- Site Assignment -->
+      <!-- <div class="form-group">
+        <label for="queueSite">Site</label>
+        <select
+          id="queueSite"
+          name="queueSite"
+          class="form-control"
+          [(ngModel)]="newQueue.site"
+          required
+        >
+          <option value="">-- Select Site --</option>
+          <option *ngFor="let site of sites" [value]="site.id">
+            {{ site.name }}
+          </option>
+        </select>
+      </div> -->
+
+      <!-- Action Buttons -->
+      <div class="form-actions">
+        <button type="button" class="btn cancel-btn" (click)="goBack()">
+          Cancel
+        </button>
+        <button type="submit" class="btn add-btn">Create</button>
+      </div>
+    </form>
   </div>
-</div>
 </div>
   </div>
 </div>

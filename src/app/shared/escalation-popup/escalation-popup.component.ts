@@ -2,17 +2,18 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AgGridModule } from 'ag-grid-angular';
 import { ColDef } from 'ag-grid-community';
+import { DialogModule } from 'primeng/dialog';
 
 @Component({
-  selector: 'app-escalation-popup',
-  templateUrl: './escalation-popup.component.html',
-  styleUrls: ['./escalation-popup.component.css'],
-  standalone: true,
-  imports: [
-    CommonModule,
-    AgGridModule,
-    // Import necessary modules here if needed
-  ],
+    selector: 'app-escalation-popup',
+    templateUrl: './escalation-popup.component.html',
+    styleUrls: ['./escalation-popup.component.css'],
+    imports: [
+        CommonModule,
+        AgGridModule,
+        DialogModule,
+        // Import necessary modules here if needed
+    ]
 })
 export class EscalationPopupComponent {
   @Input() isVisible = false;

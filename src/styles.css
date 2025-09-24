@@ -1,3 +1,10 @@
+@import 'ag-grid-community/styles/ag-grid.css';
+@import 'ag-grid-community/styles/ag-theme-alpine.css';
+
+
+@import './styles/ag-grid-overrides.css';
+
+
 /* You can add global styles to this file, and also import other style files */
 html, body {
     margin: 0 !important;
@@ -52,5 +59,12 @@ body { margin: 0; font-family: Neometric 2; }
   border-radius: 50%; /* Circular highlight */
 }
 
-@import 'ag-grid-community/styles/ag-grid.css';
-@import 'ag-grid-community/styles/ag-theme-alpine.css';
+.ag-root {
+  justify-content: flex-end !important;
+}
+
+.ag-header-row {
+  justify-content: flex-end !important;
+}
+
+

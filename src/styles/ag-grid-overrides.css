@@ -1,0 +1,4 @@
+/* Override ag-grid font */
+.ag-root-wrapper {
+  font-family: Arial, Helvetica, sans-serif !important;
+}

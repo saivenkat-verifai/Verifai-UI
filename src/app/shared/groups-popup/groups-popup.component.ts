@@ -18,17 +18,16 @@ import { TreeDataModule } from "ag-grid-enterprise";
 ModuleRegistry.registerModules([TreeDataModule]);
 
 @Component({
-  selector: "app-groups-popup",
-  templateUrl: "./groups-popup.component.html",
-  styleUrls: ["./groups-popup.component.css"],
-  standalone: true,
-  imports: [
-    AgGridModule,
-    FormsModule,
-    MatNativeDateModule,
-    MatDatepickerModule,
-    CommonModule,
-  ],
+    selector: "app-groups-popup",
+    templateUrl: "./groups-popup.component.html",
+    styleUrls: ["./groups-popup.component.css"],
+    imports: [
+        AgGridModule,
+        FormsModule,
+        MatNativeDateModule,
+        MatDatepickerModule,
+        CommonModule,
+    ]
 })
 export class GroupsPopupComponent implements OnChanges {
   @Input() isVisible = false;

@@ -21,18 +21,22 @@
 
       <div class="calender-section-body">
         <!-- Add calendar section below the dashboard header -->
-       
-          <div class="calendar-section-wrapper calender-first-section">
-        <app-calendar
-        ></app-calendar>
-      </div>
+
+        <div class="calendar-section-wrapper calender-first-section">
+          <app-calendar></app-calendar>
+        </div>
         <!-- Toggle Switches -->
         <div class="escalated-section calender-second-section">
           <div class="filter" *ngIf="selectedFilter === 'CLOSED'">
             <div class="filter-item">
-              <h3 class="filters-title">SUSPCIOUS</h3>
+              <h3 class="filters-title">SUSPICIOUS</h3>
               <label class="switch">
-                <input type="checkbox" />
+                <input
+                  type="checkbox"
+                  [checked]="suspiciousChecked"
+                  (click)="onSuspiciousToggle()"
+                />
+
                 <span class="slider round"></span>
               </label>
             </div>
@@ -40,14 +44,18 @@
             <div class="filter-item">
               <h3 class="filters-title">FALSE</h3>
               <label class="switch">
-                <input type="checkbox" />
+                <input
+                  type="checkbox"
+                  [checked]="falseChecked"
+                  (click)="onFalseToggle()"
+                />
                 <span class="slider round"></span>
               </label>
             </div>
           </div>
           <div class="filter" *ngIf="selectedFilter === 'PENDING'">
             <div class="filter-item">
-              <h3 class="filters-title">WALLS</h3>
+              <h3 class="filters-title">CONSOLES</h3>
               <label class="switch">
                 <input type="checkbox" />
                 <span class="slider round"></span>
@@ -55,7 +63,7 @@
             </div>
 
             <div class="filter-item">
-              <h3 class="filters-title">GROUPS</h3>
+              <h3 class="filters-title">QUEUES</h3>
               <label class="switch">
                 <input type="checkbox" />
                 <span class="slider round"></span>
@@ -74,72 +82,6 @@
               class="search-input"
               (input)="onFilterTextBoxChanged()"
             />
-          </div>
-        </div>
-        <!-- Right-side Popup -->
-        <div class="right-popup" *ngIf="isPopupVisible">
-          <div class="popup-header">
-            <div class="popup-header-content">
-              <img
-                *ngIf="selectedItem?.iconPath"
-                [src]="selectedItem.iconPath"
-                alt="icon"
-              />
-              <div class="icon-info">
-                <p class="label">
-                  {{ getIconLabel(selectedItem?.iconPath) }}
-                </p>
-              </div>
-            </div>
-            <div *ngIf="selectedDate" class="selected-date">
-              <p>{{ selectedDate | date : "dd MMMM, yyyy" }}</p>
-            </div>
-            <button class="close-btn" (click)="closePopup()">×</button>
-          </div>
-          <div class="popup-body">
-            <div class="escalated-content-section">
-              <ag-grid-angular
-                style="width: 100%; height: 100vh"
-                class="ag-theme-alpine"
-                theme="legacy"
-                [rowData]="popupRowData"
-                [columnDefs]="popupColumnDefs"
-                [defaultColDef]="{
-                  resizable: true,
-                  sortable: true,
-                  filter: true
-                }"
-                [pagination]="true"
-                [paginationPageSize]="10"
-                [localeText]="localeText"
-              >
-              </ag-grid-angular>
-            </div>
-          </div>
-        </div>
-
-        <!-- Right-side Popup for ESCALATION DETAILS -->
-        <div class="right-tablepopup" *ngIf="isTablePopupVisible">
-          <div class="popup-header">
-            <div class="popup-header-content">
-              <img
-                *ngIf="selectedItem?.iconPath"
-                [src]="selectedItem.iconPath"
-                alt="icon"
-              />
-              <div class="icon-info">
-                <p class="label">ESCALATION DETAILS</p>
-              </div>
-            </div>
-            <div *ngIf="selectedDate" class="selected-date">
-              <p>{{ selectedDate | date : "dd MMMM, yyyy" }}</p>
-            </div>
-            <button class="close-btn" (click)="closePopup()">×</button>
-          </div>
-          <div class="popup-body">
-            <div class="escalated-content-section">
-              <app-escalation-popup></app-escalation-popup>
-            </div>
           </div>
         </div>
 
@@ -205,7 +147,6 @@
           <div
             class="calender-escalated-card"
             *ngFor="let e of secondEscalatedDetails"
-            (click)="openPopup(e)"
           >
             <div class="calender-escalated-card-content">
               <!-- Show label if present -->
@@ -238,78 +179,108 @@
         </div>
         <div class="escalated-section calender-sixth-section"></div>
         <!-- More/Less toggle button -->
-        <div
-          class="escalated-section calender-seventh-section"
-          *ngIf="selectedFilter === 'CLOSED'"
-        >
-          <div class="more-less-toggle" (click)="toggleMore()">
-            <button>
-              <span class="btn-text">{{ showMore ? "Less" : "More" }}</span>
-              <span class="more-arrow">
-                <i [ngClass]="showMore ? 'arrow-up' : 'arrow-down'"></i>
-              </span>
-            </button>
-          </div>
-
-          <!-- Expandable section -->
-        </div>
+     <!-- More/Less toggle button -->
+<div class="escalated-section calender-seventh-section">
+  <div class="more-less-toggle" (click)="toggleMore()">
+    <button>
+      <span class="btn-text">{{ showMore ? "Less" : "More" }}</span>
+      <span class="more-arrow">
+        <i [ngClass]="showMore ? 'arrow-up' : 'arrow-down'"></i>
+      </span>
+    </button>
+  </div>
+</div>
       </div>
-      <!-- <div class="m-t-20" *ngIf="showMore">
-        <div class="escalated-content-section">
-          <div class="escalated-section-body">
-            <div class="escalated-section first-section">
-              <div class="escalated-card" *ngFor="let e of escalatedDetails">
-                <div class="escalated-card-content">
-                  <p [ngStyle]="{ color: e.color }">{{ e.value }}</p>
-                  <h4>{{ e.label }}</h4>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> -->
 
+      <!-- Expandable section -->
       <div class="m-t-20" *ngIf="showMore">
-        <div class="escalated-content-section">
-          <div class="escalated-section-body">
-            <div class="escalated-section first-section">
-              <div class="escalated-card" *ngFor="let e of escalatedDetails">
-                <div class="escalated-card-content">
-                  <h4 class="labelmargin">{{ e.label }}</h4>
-                  <p [ngStyle]="{ color: e.color }">{{ e.value }}</p>
-                </div>
-
-                <div class="icons">
-                  <!-- Dots -->
-                  <div class="dots-column" *ngIf="e.colordot">
-                    <div class="icon-section" *ngFor="let dot of e.colordot">
-                      <span
-                        class="dot"
-                        [ngStyle]="{ 'background-color': dot.iconcolor }"
-                      ></span>
-                      <span>{{ dot.count }}</span>
-                    </div>
+        <!-- CLOSED more section -->
+        <ng-container *ngIf="selectedFilter === 'CLOSED'">
+          <div class="escalated-content-section">
+            <div class="escalated-section-body">
+              <div class="escalated-section first-section">
+                <div class="escalated-card" *ngFor="let e of escalatedDetailsClosed">
+                  <div class="escalated-card-content">
+                    <h4 class="labelmargin">{{ e.label }}</h4>
+                    <p [ngStyle]="{ color: e.color }">{{ e.value }}</p>
                   </div>
 
-                  <!-- Icons -->
-                  <div class="icons-group" *ngIf="e.icons">
-                    <div class="icon-section" *ngFor="let icon of e.icons">
-                      <img
-                        [src]="icon.iconPath"
-                        alt="icon"
-                        class="icon-image"
-                        [ngClass]="{
-                          'cam-icon': icon.iconPath.includes('cam.svg')
-                        }"
-                      />
-                      <span>{{ icon.count }}</span>
+                  <div class="icons">
+                    <!-- Dots -->
+                    <div class="dots-column" *ngIf="e.colordot">
+                      <div class="icon-section" *ngFor="let dot of e.colordot">
+                        <span
+                          class="dot"
+                          [ngStyle]="{ 'background-color': dot.iconcolor }"
+                        ></span>
+                        <span>{{ dot.count }}</span>
+                      </div>
+                    </div>
+
+                    <!-- Icons -->
+                    <div class="icons-group" *ngIf="e.icons">
+                      <div class="icon-section" *ngFor="let icon of e.icons">
+                        <img
+                          [src]="icon.iconPath"
+                          alt="icon"
+                          class="icon-image"
+                          [ngClass]="{
+                            'cam-icon': icon.iconPath.includes('cam.svg')
+                          }"
+                        />
+                        <span>{{ icon.count }}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </ng-container>
+
+        <!-- PENDING more section -->
+        <ng-container *ngIf="selectedFilter === 'PENDING'">
+          <div class="escalated-content-section">
+            <div class="escalated-section-body">
+              <div class="escalated-section first-section">
+                <div class="escalated-card" *ngFor="let e of escalatedDetailsPending">
+                  <div class="escalated-card-content">
+                    <h4 class="labelmargin">{{ e.label }}</h4>
+                    <p [ngStyle]="{ color: e.color }">{{ e.value }}</p>
+                  </div>
+
+                  <div class="icons">
+                    <!-- Dots -->
+                    <div class="dots-column" *ngIf="e.colordot">
+                      <div class="icon-section" *ngFor="let dot of e.colordot">
+                        <span
+                          class="dot"
+                          [ngStyle]="{ 'background-color': dot.iconcolor }"
+                        ></span>
+                        <span>{{ dot.count }}</span>
+                      </div>
+                    </div>
+
+                    <!-- Icons -->
+                    <div class="icons-group" *ngIf="e.icons">
+                      <div class="icon-section" *ngFor="let icon of e.icons">
+                        <img
+                          [src]="icon.iconPath"
+                          alt="icon"
+                          class="icon-image"
+                          [ngClass]="{
+                            'cam-icon': icon.iconPath.includes('cam.svg')
+                          }"
+                        />
+                        <span>{{ icon.count }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
       </div>
 
       <!-- PENDING View -->
@@ -343,7 +314,7 @@
             theme="legacy"
             class="ag-theme-alpine"
             [rowData]="rowData"
-            [columnDefs]="columnDefs"
+            [columnDefs]="closedColumnDefs"
             [defaultColDef]="{ resizable: true,}"
             [pagination]="true"
             [paginationPageSize]="10"

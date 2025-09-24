@@ -11,14 +11,13 @@ import { CommonModule } from "@angular/common";
 import { ESCALATED_COLORS } from "src/app/shared/constants/chart-colors";
 
 @Component({
-  selector: "app-column-chart",
-  templateUrl: "./column-chart.component.html",
-  styleUrls: ["./column-chart.component.css"],
-  standalone: true,
-  imports: [
-    CommonModule, // ✅ for *ngIf
-    HighchartsChartModule, // ✅ so <highcharts-chart> works
-  ],
+    selector: "app-column-chart",
+    templateUrl: "./column-chart.component.html",
+    styleUrls: ["./column-chart.component.css"],
+    imports: [
+        CommonModule, // ✅ for *ngIf
+        HighchartsChartModule, // ✅ so <highcharts-chart> works
+    ]
 })
 export class ColumnChartComponent implements OnChanges, AfterViewInit {
   @Input() chartMode: string = "";
