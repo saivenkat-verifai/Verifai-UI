@@ -1,6 +1,9 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import * as Highcharts from 'highcharts';
+
 import { HighchartsChartModule } from 'highcharts-angular';
+import * as Highcharts from 'highcharts';
+
+
 
 @Component({
   selector: 'app-line-chart',
@@ -28,6 +31,7 @@ export class LineChartComponent implements OnChanges {
 
   private updateChartWithHourlyData() {
     this.chartOptions = {
+        accessibility: { enabled: false },
       chart: { type: 'line' },
       title: { text: 'Suspicious Events Hourly Breakdown', align: 'center' },
       xAxis: { categories: this.categories },

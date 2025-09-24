@@ -19,6 +19,34 @@ import { routes } from './app/app-routing.module'; // your route array
 // Register AG Grid modules before bootstrap
 ModuleRegistry.registerModules([AllCommunityModule]);
 
+// ---------------------
+// Global passive listener patch
+// ---------------------
+(function() {
+  const orig = EventTarget.prototype.addEventListener;
+  EventTarget.prototype.addEventListener = function(
+    type: string,
+    listener: EventListenerOrEventListenerObject,
+    options?: boolean | AddEventListenerOptions
+  ) {
+    if (
+      type === 'scroll' ||
+      type === 'wheel' ||
+      type === 'touchstart' ||
+      type === 'touchmove'
+    ) {
+      if (typeof options === 'boolean') {
+        options = { capture: options };
+      }
+      options = { ...(options as object), passive: true };
+    }
+    return orig.call(this, type, listener, options);
+  };
+})();
+
+// ---------------------
+// Bootstrap Angular app
+// ---------------------
 bootstrapApplication(AppComponent, {
   providers: [
     provideAnimations(),

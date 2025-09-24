@@ -15,6 +15,7 @@ import { CommonModule } from '@angular/common';
 })
 export class AppComponent implements OnInit {
   showHeader = true;
+  
 
   constructor(private router: Router) {}
 
@@ -26,4 +27,6 @@ export class AppComponent implements OnInit {
         this.showHeader = event.urlAfterRedirects !== '/login';
       });
   }
+
+  
 }

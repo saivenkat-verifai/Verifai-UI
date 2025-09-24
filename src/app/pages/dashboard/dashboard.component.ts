@@ -1,13 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule, UpperCasePipe } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
-import { CardModule } from 'primeng/card';
-import { DashboardService } from './dashboard.service';
-import { CalendarComponent } from 'src/app/shared/calendar/calendar.component';
+import { Component, OnInit } from "@angular/core";
+import { CommonModule, UpperCasePipe } from "@angular/common";
+import { HttpClientModule } from "@angular/common/http";
+import { CardModule } from "primeng/card";
+import { DashboardService } from "./dashboard.service";
+import { CalendarComponent } from "src/app/shared/calendar/calendar.component";
 import { ColumnChartComponent } from "../../shared/column-chart/column-chart.component";
 import { LineChartComponent } from "src/app/shared/line-chart/line-chart.component";
 import { ESCALATED_COLORS } from "src/app/shared/constants/chart-colors";
-
 
 interface CardDot {
   iconcolor: string;
@@ -23,18 +22,17 @@ interface DashboardCard {
 }
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css'],
+  selector: "app-dashboard",
+  templateUrl: "./dashboard.component.html",
+  styleUrls: ["./dashboard.component.css"],
   standalone: true,
   imports: [
     CommonModule,
-    UpperCasePipe,
     HttpClientModule,
     CardModule,
     ColumnChartComponent,
     CalendarComponent,
-    LineChartComponent
+    LineChartComponent,
   ],
 })
 export class DashboardComponent implements OnInit {
@@ -82,59 +80,66 @@ export class DashboardComponent implements OnInit {
           this.hourlyBreakdownData = this.mapHourly(data.suspicious.details);
         },
         error: (err) => console.error(err),
-        complete: () => (this.isLoading = false),
+       complete: () => {
+  setTimeout(() => {
+    this.isLoading = false;
+  });
+}
       });
   }
 
   private mapCards(data: any): DashboardCard[] {
-  const formatTitle = (key: string) => {
-    return key
-      .replace(/([A-Z])/g, ' $1')
-      .replace(/^./, (str) => str.toUpperCase());
-  };
-  const config = Object.keys(data).map((key) => {
-    const value = data[key as keyof typeof data];
-    const percKey = Object.keys(value).find((k) =>
-      k.toLowerCase().includes('percentage')
-    );
-    return {
-      key,
-      title: formatTitle(key),
-      color: key === 'totalEvents' ? 'red' : 'white',
-      perc: percKey && key !== 'totalEvents' ? value[percKey as keyof typeof value] : undefined,
+    const formatTitle = (key: string) => {
+      return key
+        .replace(/([A-Z])/g, " $1")
+        .replace(/^./, (str) => str.toUpperCase());
     };
-  });
-  return config.map((c) => {
-    const item = data[c.key];
-    return {
-      title: c.title,
-      value: item.total,
-      percentage: c.perc,
-      color: c.color,
-      colordot: [
-        { iconcolor: '#FFC400', count: item.eventWall },
-        { iconcolor: '#53BF8B', count: item.manualWall },
-      ],
-      icons: [
-        { iconPath: 'assets/home.svg', count: item.sitesCount },
-        { iconPath: 'assets/cam.svg', count: item.cameraCount },
-      ],
-    };
-  });
-}
+    const config = Object.keys(data).map((key) => {
+      const value = data[key as keyof typeof data];
+      const percKey = Object.keys(value).find((k) =>
+        k.toLowerCase().includes("percentage")
+      );
+      return {
+        key,
+        title: formatTitle(key),
+        color: key === "totalEvents" ? "red" : "white",
+        perc:
+          percKey && key !== "totalEvents"
+            ? value[percKey as keyof typeof value]
+            : undefined,
+      };
+    });
+    return config.map((c) => {
+      const item = data[c.key];
+      return {
+        title: c.title,
+        value: item.total,
+        percentage: c.perc,
+        color: c.color,
+        colordot: [
+          { iconcolor: "#FFC400", count: item.eventWall },
+          { iconcolor: "#53BF8B", count: item.manualWall },
+        ],
+        icons: [
+          { iconPath: "assets/home.svg", count: item.sitesCount },
+          { iconPath: "assets/cam.svg", count: item.cameraCount },
+        ],
+      };
+    });
+  }
 
   private mapDetails(details: any) {
     return Object.keys(details).map((k, i) => ({
       label: k.charAt(0).toUpperCase() + k.slice(1),
       value: details[k].total,
-      color: ESCALATED_COLORS[i] || '#000',
+      color: ESCALATED_COLORS[i] || "#000",
       colordot: [
-        { iconcolor: '#FFC400', count: details[k].eventWall },
-        { iconcolor: '#53BF8B', count: details[k].manualWall },
+        { iconcolor: "#FFC400", count: details[k].eventWall },
+        { iconcolor: "#53BF8B", count: details[k].manualWall },
       ],
       icons: [
-        { iconPath: 'assets/home.svg', count: details[k].sitesCount },
-        { iconPath: 'assets/cam.svg', count: details[k].cameraCount },
+        { iconPath: "assets/home.svg", count: details[k].sitesCount },
+        { iconPath: "assets/cam.svg", count: details[k].cameraCount },
       ],
     }));
   }
@@ -161,12 +166,12 @@ export class DashboardComponent implements OnInit {
       const d = details[k];
       series.push({
         name: `${k} - Event Wall`,
-        type: 'line',
+        type: "line",
         data: d.hourlyBreakdown.HourlyEventWall,
       });
       series.push({
         name: `${k} - Manual Wall`,
-        type: 'line',
+        type: "line",
         data: d.hourlyBreakdown.HourlyManualWall,
       });
     });

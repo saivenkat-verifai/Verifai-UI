@@ -4,21 +4,13 @@
 @import 'primeicons/primeicons.css';
 
 @font-face {
-  font-family: 'Neometric Bold';
-  font-style: normal;
-  font-weight: 600;
-  src: local('Neometric'), url('https://fonts.cdnfonts.com/s/18720/Unnamed Bold (Regular).woff') format('woff');
-}
-@font-face {
   font-family: 'Neometric Medium';
   font-style: normal;
   font-weight: 500;
   src: local('Neometric'), url('https://fonts.cdnfonts.com/s/18720/Neometric Medium (Regular).woff') format('woff');
 }
-@font-face {
-  font-family: 'Nasalization';
-  src: local('Nasalization'), url('https://fonts.cdnfonts.com/s/26353/NASALIZA.woff') format('woff');
-}
+
+
 @font-face {
   font-family: 'NasalizationLight';
   font-style: normal;
